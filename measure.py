@@ -10,6 +10,12 @@
 
 # Carregando as bibliotecas que utilizaremos
 import pytta
+import lju3ei1050
+
+#%% Inicia stream de dados com o LabJack U3 com o sensor de temperatura e umidade EI1050
+
+tempHumid = lju3ei1050.main()
+tempHumid.start()
 
 #%% Configuração da medição
 
@@ -96,7 +102,6 @@ measureTake_fake.comment = 'music'
 measureTake_fake.sourceReceiver = ['S1R1','S1R1','S1R2','S1R3']
 measureTake_fake.temp = 24.666
 measureTake_fake.RH = 69
-
 # measureTake = measureTake_fake
 
 #%% Nova tomada da medição
@@ -136,8 +141,9 @@ playRec[excitation].channelName = [channelName[i-1] for i in inChannel]
 
 measureTake = playRec[excitation].run()
 measureTake.plot_time()
-measureTake.temp = 24 # FALTA INTEGRAR LABJACK
-measureTake.RH = 69 # FALTA INTEGRAR LABJACK
+# Adquire do LabJack U3 + EI1050 a temperatura e umidade relativa instantânea
+measureTake.temp, measureTake.RH = tempHumid.read()
+#measureTake.temp, measureTake.RH = (24,69)
 
 #%% Armazenamento da última tomada da medição
 #%% Prepara última tomada da medição para armazenamento no dicionário de dados medidos
@@ -191,4 +197,7 @@ if channelStatus[3]:
 
 #%% Acessando dados no dicionário de dados medidos
 
-#measurementData['S1R1']['sweep']['binaural'].play()a
+#measurementData['S1R1']['sweep']['binaural'].play()
+    
+#%% Cessa o stream de dados com o LabJack U3 com o sensor de temperatura e umidade EI1050
+tempHumid.stop()
