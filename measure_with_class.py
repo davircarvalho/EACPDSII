@@ -8,6 +8,7 @@ Created on Wed Apr 17 18:19:49 2019
 
 import measureClass as m
 import pytta
+from scipy import io
 
 #%% Carrega sinais de excitação
 excitationSignals = {}
@@ -88,3 +89,9 @@ measureTake.run()
 
 #%% Salva tomada de medição no objeto de dados D
 measureTake.save(D)
+
+#%% Salva tomada de medição no objeto de dados D
+io.savemat('Medicao_teste', {'MeasurementData1':D})
+
+#%% Para carregar arquivos medidos
+io.loadmat('Medicao_teste.mat')
