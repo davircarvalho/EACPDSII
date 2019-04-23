@@ -38,30 +38,51 @@ SM = m.newMeasurement(name = 'Medição teste', # Nome da medição
                      averages = 3, # Número de médias por medição (FALTA IMPLEMENTAR)
                      sourcesNumber = 2, # Número de fontes; dodecaedro e p.a. local
                      receiversNumber = 5, # Número de receptores
-                     noiseFloorTp = 30, # [s] tempo de gravação do ruído de fundo
-                     calibrationTp = 10) # [s] tempo de gravação do sinal de calibração
+                     noiseFloorTp = 2, # [s] tempo de gravação do ruído de fundo
+                     calibrationTp = 2) # [s] tempo de gravação do sinal de calibração
 
 #%% Cria instância de dados medidos
 D = m.Data(SM)
 
-#%% Cria nova tomada de medição
+#%% Cria nova tomada de medição para uma nova configuração fonte receptor
 measureTake = m.measureTake(SM,
                             kind = 'newpoint',
-#                            kind = 'noisefloor', # FALTA IMPLEMENTAR
-#                            kind = 'calibration', # FALTA IMPLEMENTAR
+                            # Status do canal: True para Ativado e False para Desativado
+                            channelStatus = [False, # canal 1
+                                             False, # canal 2
+                                             True, # canal 3
+                                             False], # canal 4
+                            # Configuração fonte receptor
+                            # Obs. 1: manter itens da lista para canais Desativados
+                            sourceReceiver = ['S1R2', # canal 1 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
+                                              'S1R2', # canal 2 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
+                                              'S1R5', # canal 3 
+                                              'S1R4'], # canal 4
+                            excitation = 'varredura') # escolhe sinal de excitacão  disponível no Setup de Medição
+#%% Cria nova tomada de medição do ruído de fundo
+measureTake = m.measureTake(SM,
+                            kind = 'noisefloor',
                             # Status do canal: True para Ativado e False para Desativado
                             channelStatus = [True, # canal 1
                                              True, # canal 2
                                              True, # canal 3
                                              True], # canal 4
                             # Configuração fonte receptor
-                            # Obs. 1: manter itens para canais Desativados
-                            # Obs. 2: para kind = 'calibration'
-                            sourceReceiver = ['S1R2', # canal 1 (ATENÇÃO: canal 1 e 2 tem a mesma cfg.)
-                                              'S1R2', # canal 2 (ATENÇÃO: canal 1 e 2 tem a mesma cfg.)
-                                              'S1R5', # canal 3 
-                                              'S1R4'], # canal 4
-                            excitation = 'varredura') # escolhe sinal de excitacão  disponível no Setup de Medição
+                            # Obs. 2: para kind = 'noisefloor' não há fonte
+                            # Obs. 1: manter itens da lista para canais Desativados
+                            sourceReceiver = ['R2', # canal 1 (ATENÇÃO: canal 1 e 2 tem a mesma cfg.)
+                                              'R2', # canal 2 (ATENÇÃO: canal 1 e 2 tem a mesma cfg.)
+                                              'R5', # canal 3 
+                                              'R4']) # canal 4
+#%% Cria nova tomada de medição para calibração
+measureTake = m.measureTake(SM,
+                            kind = 'calibration',
+                            # Status do canal: True para Ativado e False para Desativado
+                            # Obs. 1: para kind = 'calibration' os canais devem ser calibrados individualmente
+                            channelStatus = [False, # canal 1
+                                             False, # canal 2
+                                             True, # canal 3
+                                             False]) # canal 4
 #%% Nova tomada de medição
 measureTake.run()
 
