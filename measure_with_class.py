@@ -33,9 +33,9 @@ SM = m.newMeasurement(name = 'Medição teste', # Nome da medição
                      samplingRate = 44100, # [Hz]
                      freqMin = 20, # [Hz]
                      freqMax = 20000, # [Hz]
-                     inChannel = [1], #,2,3,4], # Canais de entrada
-                     channelName = ['Orelha E'], #,'Orelha D','Mic 1','Mic 2'], # Lista com o nome dos canais 
-                     outChannel = [1], #,2], # Canais de saída
+                     inChannel = [1,2,3,4], # Canais de entrada
+                     channelName = ['Orelha E','Orelha D','Mic 1','Mic 2'], # Lista com o nome dos canais 
+                     outChannel = [1,2], # Canais de saída
                      averages = 3, # Número de médias por medição (FALTA IMPLEMENTAR)
                      sourcesNumber = 2, # Número de fontes; dodecaedro e p.a. local
                      receiversNumber = 5, # Número de receptores
