@@ -105,7 +105,7 @@ class Data():
             for rN in range(1,MS.receiversNumber+1):
                 self.measuredData['S'+str(sN)+'R'+str(rN)] = {} # Insere as chaves referente as configurações fonte receptor
                 for key in MS.excitationSignals:
-                    self.measuredData['S'+str(sN)+'R'+str(rN)][key] = {'binaural':None,'hc':None} # Insere as chaves referentes ao sinal de excitação e tipo de gravação
+                    self.measuredData['S'+str(sN)+'R'+str(rN)][key] = {'binaural':0,'hc':0} # Insere as chaves referentes ao sinal de excitação e tipo de gravação
         self.measuredData['noisefloor'] = [] # Cria lista de medições de ruído de fundo
         self.measuredData['calibration'] = {} # Cria dicionário com os canais de entrada da medição
         for chN in MS.channelName:
