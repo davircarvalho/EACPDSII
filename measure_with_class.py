@@ -9,6 +9,11 @@ Created on Wed Apr 17 18:19:49 2019
 import measureClass as m
 import pytta
 from scipy import io
+import lju3ei1050
+
+#%% Cria objeto para stream de dados com o LabJack U3 com o sensor de temperatura e umidade EI1050
+
+tempHumid = lju3ei1050.main()
 
 #%% Carrega sinais de excitação
 excitationSignals = {}
@@ -26,8 +31,8 @@ excitationSignals['fala'] = pytta.read_wav('Voice Sabine Short.WAV') # Carregand
 SM = m.newMeasurement(name = 'Medição teste', # Nome da medição
 #                      Sintaxe : device = [<entrada>,<saida>] ou <entrada/saida>
 #                      Utilize pytta.list_devices() para listar os dispositivos do seu computador. 
-#                     device = [0,1], # PC laza Seleciona dispositivo listado em pytta.list_devices()
-                     device = 4, # Saffire Pro 40 laza Seleciona dispositivo listado em pytta.list_devices()
+                     device = [0,1], # PC laza Seleciona dispositivo listado em pytta.list_devices()
+#                     device = 4, # Saffire Pro 40 laza Seleciona dispositivo listado em pytta.list_devices()
 #                     device = 0, # Firebox laza Seleciona dispositivo listado em pytta.list_devices()
                      excitationSignals=excitationSignals, # Sinais de excitação
                      samplingRate = 44100, # [Hz]
@@ -59,7 +64,8 @@ measureTake = m.measureTake(SM,
                                               'S1R2', # canal 2 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
                                               'S1R5', # canal 3 
                                               'S1R4'], # canal 4
-                            excitation = 'varredura') # escolhe sinal de excitacão  disponível no Setup de Medição
+                            excitation = 'varredura', # escolhe sinal de excitacão  disponível no Setup de Medição
+                            tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
 #%% Cria nova tomada de medição do ruído de fundo
 measureTake = m.measureTake(SM,
                             kind = 'noisefloor',
@@ -74,16 +80,18 @@ measureTake = m.measureTake(SM,
                             sourceReceiver = ['R2', # canal 1 (ATENÇÃO: canal 1 e 2 tem a mesma cfg.)
                                               'R2', # canal 2 (ATENÇÃO: canal 1 e 2 tem a mesma cfg.)
                                               'R5', # canal 3 
-                                              'R4']) # canal 4
+                                              'R4'], # canal 4
+                            tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
 #%% Cria nova tomada de medição para calibração
 measureTake = m.measureTake(SM,
                             kind = 'calibration',
                             # Status do canal: True para Ativado e False para Desativado
                             # Obs. 1: para kind = 'calibration' os canais devem ser calibrados individualmente
-                            channelStatus = [False, # canal 1
+                            channelStatus = [True, # canal 1
                                              False, # canal 2
-                                             True, # canal 3
-                                             False]) # canal 4
+                                             False, # canal 3
+                                             False], # canal 4
+                            tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
 #%% Nova tomada de medição
 measureTake.run()
 

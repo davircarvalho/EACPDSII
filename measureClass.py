@@ -9,12 +9,8 @@ Created on Wed Apr 16 21:48:23 2019
 #%% Importando bibliotecas
 
 import pytta
-#import lju3ei1050
+
 import copy as cp
-
-#%% Inicia stream de dados com o LabJack U3 com o sensor de temperatura e umidade EI1050
-
-#tempHumid = lju3ei1050.main()
 
 #%% Classe da medição
 
@@ -122,9 +118,11 @@ class measureTake():
                  MS,
                  kind,
                  channelStatus,
+                 tempHumid,
                  sourceReceiver=None,
                  excitation=None):
-#        tempHumid.start()
+        self.tempHumid = tempHumid
+        self.tempHumid.start()
         self.MS = MS
         self.kind = kind
         self.channelStatus = channelStatus
@@ -162,8 +160,8 @@ class measureTake():
             self.measuredTake.append(self.measurementObject.run())
             self.measuredTake[i].plot_time()
             # Adquire do LabJack U3 + EI1050 a temperatura e umidade relativa instantânea
-            #measureTake[i].temp, measureTake.RH = tempHumid.read()
-            self.measuredTake[i].temp, self.measuredTake[i].RH = (24,69)            
+            self.measuredTake[i].temp, self.measuredTake[i].RH = self.tempHumid.read()
+#            self.measuredTake[i].temp, self.measuredTake[i].RH = (24,69)            
             
     def save(self,dataObj):
         # Desmembra o SignalObj measureTake de 4 canais em 3 SignalObj referentes ao arranjo biauricular 
@@ -248,6 +246,4 @@ class measureTake():
                 self.calibAverages[i].RH = self.measuredTake[i].RH
                 self.calibAverages[i].timeStamp = self.measuredTake[i].timeStamp
             dataObj.measuredData['calibration'][self.channelName[0]].append(self.calibAverages)
-
-
-#        tempHumid.stop()
+        self.tempHumid.stop()
