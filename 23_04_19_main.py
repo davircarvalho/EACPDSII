@@ -20,7 +20,7 @@ tempHumid = lju3ei1050.main()
 excitationSignals = {}
 excitationSignals['varredura'] = pytta.generate.sweep(freqMin=20, # Geração do sweep (também pode ser carregado projeto prévio)
                             freqMax=20000,
-                            fftDegree=17,
+                            fftDegree=18,
                             startMargin=1,
                             stopMargin=1.5,
                             method='logarithmic',
@@ -42,31 +42,25 @@ SM = m.newMeasurement(name = 'Medição teste', # Nome da medição
                      freqMax = 20000, # [Hz]
                      inChannel = [1,2,3,4], # Canais de entrada
                      channelName = ['Orelha E','Orelha D','Mic 1','Mic 2'], # Lista com o nome dos canais 
-                     outChannel = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18], # Canais de saída
+                     outChannel = [12], # Canais de saída
                      averages = 3, # Número de médias por medição (FALTA IMPLEMENTAR)
-                     sourcesNumber = 2, # Número de fontes; dodecaedro e p.a. local
-                     receiversNumber = 5, # Número de receptores
-                     noiseFloorTp = 2, # [s] tempo de gravação do ruído de fundo
-                     calibrationTp = 2) # [s] tempo de gravação do sinal de calibração
+                     sourcesNumber = 2, # Número de posições de fonte; 2 dodecaedro + 1 p.a. local
+                     receiversNumber = 2, # Número de receptores
+                     noiseFloorTp = 5, # [s] tempo de gravação do ruído de fundo
+                     calibrationTp = 4) # [s] tempo de gravação do sinal de calibração
 
 #%% Cria instância de dados medidos
 D = m.Data(SM)
 
-#%% Cria nova tomada de medição para uma nova configuração fonte receptor
+#%% Cria nova tomada de medição para calibração
 measureTake = m.measureTake(SM,
-                            kind = 'newpoint',
+                            kind = 'calibration',
                             # Status do canal: True para Ativado e False para Desativado
-                            channelStatus = [True, # canal 1
-                                             True, # canal 2
-                                             True, # canal 3
+                            # Obs. 1: para kind = 'calibration' os canais devem ser calibrados individualmente
+                            channelStatus = [False, # canal 1
+                                             False,# canal 2
+                                             False, # canal 3
                                              True], # canal 4
-                            # Configuração fonte receptor
-                            # Obs. 1: manter itens da lista para canais Desativados
-                            sourceReceiver = ['S1R2', # canal 1 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
-                                              'S1R2', # canal 2 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
-                                              'S1R5', # canal 3 
-                                              'S1R4'], # canal 4
-                            excitation = 'fala', # escolhe sinal de excitacão  disponível no Setup de Medição
                             tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
 #%% Cria nova tomada de medição do ruído de fundo
 measureTake = m.measureTake(SM,
@@ -79,21 +73,31 @@ measureTake = m.measureTake(SM,
                             # Configuração fonte receptor
                             # Obs. 2: para kind = 'noisefloor' não há fonte
                             # Obs. 1: manter itens da lista para canais Desativados
-                            sourceReceiver = ['R2', # canal 1 (ATENÇÃO: canal 1 e 2 tem a mesma cfg.)
-                                              'R2', # canal 2 (ATENÇÃO: canal 1 e 2 tem a mesma cfg.)
-                                              'R5', # canal 3 
-                                              'R4'], # canal 4
+                            sourceReceiver = ['R1', # canal 1 (ATENÇÃO: canal 1 e 2 tem a mesma cfg.)
+                                              'R1', # canal 2 (ATENÇÃO: canal 1 e 2 tem a mesma cfg.)
+                                              'R2', # canal 3 
+                                              'R2b'], # canal 4
                             tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
-#%% Cria nova tomada de medição para calibração
+
+#%% Cria nova tomada de medição para uma nova configuração fonte receptor
 measureTake = m.measureTake(SM,
-                            kind = 'calibration',
+                            kind = 'newpoint',
                             # Status do canal: True para Ativado e False para Desativado
-                            # Obs. 1: para kind = 'calibration' os canais devem ser calibrados individualmente
                             channelStatus = [True, # canal 1
-                                             False, # canal 2
-                                             False, # canal 3
+                                             True, # canal 2
+                                             True, # canal 3
                                              False], # canal 4
+                            # Configuração fonte receptor
+                            # Obs. 1: manter itens da lista para canais Desativados
+                            sourceReceiver = ['S2R2', # canal 1 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
+                                              'S2R2', # canal 2 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
+                                              'S2R1', # canal 3 
+                                              'S1R4'], # canal 4
+#                            excitation = 'varredura', # escolhe sinal de excitacão  disponível no Setup de Medição
+#                            excitation = 'fala',
+                            excitation = 'musica',
                             tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
+
 #%% Nova tomada de medição
 measureTake.run()
 

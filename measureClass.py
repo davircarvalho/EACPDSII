@@ -230,7 +230,7 @@ class measureTake():
         if self.kind == 'calibration':
             self.calibAverages = []
             # Pegando o nome do canal calibrado
-            j=1
+            j=0
             for i in self.channelStatus:
                 if i:
                     self.channelName = [self.MS.channelName[j]]
