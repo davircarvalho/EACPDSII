@@ -49,19 +49,34 @@ lblNmae = tk.Label(Namef, font=('arial', 25, 'italic'), bg='black', fg='green',
 
 #%% SETUP DA MEDIÇÃO
 
-#%%ARRUMAR ISSO
-#========= Condicionando sinais de entrada ==============   RESOLVER ISSO
-def SignalsIn():
-    channelStatus=[var1.get(), var2.get(), var3.get(), var4.get()]
-    for i in range(len(channelStatus)):
-        if channelStatus[i]==1:
-            channelStatus[i]=True
-        else:
-             channelStatus[i]=False
-    return channelStatus
+#==================== Função que fecha a janela da GUI ======================
+def iExit():
+    root.destroy()
+    return
+
+#========= Função que limpa as variáveis de níveis de entrada e saída =======
+    
+# ARRUMAR ISSO AQUI URGENTEMENTE!!!!
+
+def clearvars():
+    varInMin_1.set("0")
+    varInMax_1.set("0")
+    varInMin_2.set("0")
+    varInMax_2.set("0")
+    varInMin_3.set("0")
+    varInMax_3.set("0")
+    varInMin_4.set("0")
+    varInMax_4.set("0")
+    varOutMin.set("0")
+    varOutMax.set("0")
+
+#=================== Condicionando sinais de entrada ========================
+def inChannels():
+    inputs=[var1.get(), var2.get(), var3.get(), var4.get()]
+    return inputs
 
 
-#%%
+
 #========= Condicionando Checkbutton dos Sinais =========
 def AtivaDodec1():
     if var5.get()==1:
@@ -191,10 +206,10 @@ def MSG():
 
 
 #%% Declarando variáveis
-var1=tk.IntVar()
-var2=tk.IntVar()
-var3=tk.IntVar()
-var4=tk.IntVar()
+var1=tk.BooleanVar()
+var2=tk.BooleanVar()
+var3=tk.BooleanVar()
+var4=tk.BooleanVar()
 var5=tk.IntVar()
 var6=tk.IntVar()
 var7=tk.IntVar()
@@ -204,30 +219,47 @@ var10=tk.IntVar()
 var11=tk.IntVar()
 var12=tk.IntVar()
 var13=tk.IntVar()
+varInMin_1 = tk.StringVar()
+varInMax_1 = tk.StringVar()
+varInMin_2 = tk.StringVar()
+varInMax_2 = tk.StringVar()
+varInMin_3 = tk.StringVar()
+varInMax_3 = tk.StringVar()
+varInMin_4 = tk.StringVar()
+varInMax_4 = tk.StringVar()
+varOutMin = tk.StringVar() 
+varOutMax = tk.StringVar()
+
+
+#%% Setando variáveis
+varInMin_1.set("-10")
+varInMin_1.set("0")
+varInMax_1.set("0")
+varInMin_2.set("0")
+varInMax_2.set("0")
+varInMin_3.set("0")
+varInMax_3.set("0")
+varInMin_4.set("0")
+varInMax_4.set("0")
+varOutMin.set("0")
+varOutMax.set("0")
+
+
 
 
 #%% Canais de entrada
 # Frame pai - Inf
 lblInput = tk.Label(Inf, font=('arial', 15, 'italic'), bg='black', fg='white',
-                 text="Canais de entrada", bd = 4, width=23).grid(row=0, column=0)
+                 text="Input channels", bd = 4, width=23).grid(row=0, column=0)
 
-#In1 = Checkbutton(Inf, text="1 - Binaural E", variable=channelStatus[0], onvalue=True, offvalue=False,
-#                    font=('arial', 10, 'bold')). grid(row=1, column=0)
-#In2 = Checkbutton(Inf, text="2 - Binaural D", variable=channelStatus[1], onvalue=True, offvalue=False,
-#                    font=('arial', 10, 'bold')). grid(row=2, column=0)
-#In3 = Checkbutton(Inf, text="3 - Mic. 1", variable=channelStatus[2], onvalue=True, offvalue=False,
-#                    font=('arial', 10, 'bold')). grid(row=3, column=0)
-#In4 = Checkbutton(Inf, text="4 - Mic. 2", variable=channelStatus[3], onvalue=True, offvalue=False,
-#                    font=('arial', 10, 'bold')). grid(row=4, column=0)
-
-In1 = tk.Checkbutton(Inf, text="1 - Binaural E", variable=var1, onvalue=1, offvalue=0,
-                    font=('arial', 20, 'bold'), command = SignalsIn). grid(row=1, sticky=tk.W)
-In2 = tk.Checkbutton(Inf, text="2 - Binaural D", variable=var2,  onvalue=1, offvalue=0,
-                    font=('arial', 20, 'bold'), command = SignalsIn). grid(row=2, sticky=tk.W)
-In3 = tk.Checkbutton(Inf, text="3 - Mic. 1", variable=var3, onvalue=1, offvalue=0,
-                    font=('arial', 20, 'bold'), command = SignalsIn). grid(row=3, sticky=tk.W)
-In4 = tk.Checkbutton(Inf, text="4 - Mic. 2", variable=var4, onvalue=1, offvalue=0,
-                    font=('arial', 20, 'bold'), command = SignalsIn). grid(row=4, sticky=tk.W)
+In1 = tk.Checkbutton(Inf, text="1 - Binaural E", variable=var1, onvalue=True, offvalue=False,
+                    font=('arial', 20, 'bold')). grid(row=1, sticky=tk.W)
+In2 = tk.Checkbutton(Inf, text="2 - Binaural D", variable=var2,  onvalue=True, offvalue=False,
+                    font=('arial', 20, 'bold')). grid(row=2, sticky=tk.W)
+In3 = tk.Checkbutton(Inf, text="3 - Mic. 1", variable=var3, onvalue=True, offvalue=False,
+                    font=('arial', 20, 'bold')). grid(row=3, sticky=tk.W)
+In4 = tk.Checkbutton(Inf, text="4 - Mic. 2", variable=var4, onvalue=True, offvalue=False,
+                    font=('arial', 20, 'bold')). grid(row=4, sticky=tk.W)
 
 
 
@@ -235,18 +267,11 @@ In4 = tk.Checkbutton(Inf, text="4 - Mic. 2", variable=var4, onvalue=1, offvalue=
 #%% Canais de saída
 # Frame Pai - Outf
 lblOutput = tk.Label(Outf, font=('arial', 15, 'italic'), bg='black', fg='white',
-                 text="Canais de saída", bd = 4, width=23).grid(row=0, column=0)
+                 text="Output channels", bd = 4, width=23).grid(row=0, column=0)
 
-#Out1 = Checkbutton(Outf, text="1- Dodecaedro 1", variable=channelStatus[0], onvalue=True, offvalue=False,
-#                    font=('arial', 10, 'bold')). grid(row=1, column=0)
-#Out2 = Checkbutton(Outf, text="2 - Dodecaedro 2", variable=channelStatus[1], onvalue=True, offvalue=False,
-#                    font=('arial', 10, 'bold')). grid(row=2, column=0)
-#Out3 = Checkbutton(Outf, text="3 - P.A", variable=channelStatus[2], onvalue=True, offvalue=False,
-#                    font=('arial', 10, 'bold')). grid(row=3, column=0)
-
-Out1 = tk.Checkbutton(Outf, text="1- Dodecaedro 1", variable=var5, onvalue=1, offvalue=0, \
+Out1 = tk.Checkbutton(Outf, text="1 - OmniSource 1", variable=var5, onvalue=1, offvalue=0, \
                     font=('arial', 20, 'bold'), command = AtivaDodec1).grid(row=1, sticky=tk.W)
-Out2 = tk.Checkbutton(Outf, text="2 - Dodecaedro 2", variable=var6,  onvalue=1, offvalue=0, \
+Out2 = tk.Checkbutton(Outf, text="2 - OmniSource 2", variable=var6,  onvalue=1, offvalue=0, \
                     font=('arial', 20, 'bold'), command = AtivaDodec2).grid(row=2, sticky=tk.W)
 Out3 = tk.Checkbutton(Outf, text="3 - P.A", variable=var7, onvalue=1, offvalue=0, \
                     font=('arial', 20, 'bold'), command = AtivaPA).grid(row=3, sticky=tk.W)
@@ -256,20 +281,13 @@ Out3 = tk.Checkbutton(Outf, text="3 - P.A", variable=var7, onvalue=1, offvalue=0
 #%% Sinais de excitação
 # Frame pai - Sigsf
 lblOutput = tk.Label(Sigsf, font=('arial', 15, 'italic'), bg='black', fg='white',
-                 text="Sinal de excitação", bd = 4, width=23).grid(row=0, column=0)
+                 text="Excitation signal", bd = 4, width=23).grid(row=0, column=0)
 
-#Signal1 = Checkbutton(Sigsf, text="Sweep exponencial", variable=channelStatus[0], onvalue=True, offvalue=False,
-#                    font=('arial', 10, 'bold')). grid(row=1, column=0)
-#Signal2 = Checkbutton(Sigsf, text="Música", variable=channelStatus[1], onvalue=True, offvalue=False,
-#                    font=('arial', 10, 'bold')). grid(row=2, column=0)
-#Signal3 = Checkbutton(Sigsf, text="Fala", variable=channelStatus[2], onvalue=True, offvalue=False,
-#                    font=('arial', 10, 'bold')). grid(row=3, column=0)
-
-Signal1 = tk.Checkbutton(Sigsf, text="Sweep exponencial", variable=var8, onvalue=1, offvalue=0, \
+Signal1 = tk.Checkbutton(Sigsf, text="Exponential Sweep", variable=var8, onvalue=1, offvalue=0, \
                     font=('arial', 20, 'bold'), command=AtivaSweep). grid(row=1, sticky=tk.W)
-Signal2 = tk.Checkbutton(Sigsf, text="Fala", variable=var9, onvalue=1, offvalue=0, \
+Signal2 = tk.Checkbutton(Sigsf, text="Speech", variable=var9, onvalue=1, offvalue=0, \
                     font=('arial', 20, 'bold'), command=AtivaFala). grid(row=3, sticky=tk.W)
-Signal3 = tk.Checkbutton(Sigsf, text="Música", variable=var10,  onvalue=1, offvalue=0, \
+Signal3 = tk.Checkbutton(Sigsf, text="Music", variable=var10,  onvalue=1, offvalue=0, \
                     font=('arial', 20, 'bold'), command=AtivaMusica). grid(row=2, sticky=tk.W)
 
 
@@ -279,23 +297,63 @@ Signal3 = tk.Checkbutton(Sigsf, text="Música", variable=var10,  onvalue=1, offv
 lblTemplate = tk.Label(Tempf, font=('arial', 15, 'italic'), bg='black', fg='white',
                  text="Measurement type", bd = 4, width=23).grid(row=0, column=0)
 
-#Signal1 = Checkbutton(Sigsf, text="Sweep exponencial", variable=channelStatus[0], onvalue=True, offvalue=False,
-#                    font=('arial', 10, 'bold')). grid(row=1, column=0)
-#Signal2 = Checkbutton(Sigsf, text="Música", variable=channelStatus[1], onvalue=True, offvalue=False,
-#                    font=('arial', 10, 'bold')). grid(row=2, column=0)
-#Signal3 = Checkbutton(Sigsf, text="Fala", variable=channelStatus[2], onvalue=True, offvalue=False,
-#                    font=('arial', 10, 'bold')). grid(row=3, column=0)
 
-Template1 = tk.Checkbutton(Tempf, text="Calibração", font=('arial', 20, 'bold'), variable = var11, \
+Template1 = tk.Checkbutton(Tempf, text="Calibration", font=('arial', 20, 'bold'), variable = var11, \
                         onvalue=1, offvalue=0, command = AtivaCalibracao). grid(row=1, sticky=tk.W)
-Template2 = tk.Checkbutton(Tempf, text="Ruído de fundo", font=('arial', 20, 'bold'), variable = var12, \
+Template2 = tk.Checkbutton(Tempf, text="Noise floor", font=('arial', 20, 'bold'), variable = var12, \
                         onvalue=1, offvalue=0, command = AtivaRuidoDeFundo). grid(row=2, sticky=tk.W)
 Template3 = tk.Checkbutton(Tempf, text="Room response", font=('arial', 20, 'bold'), variable = var13, \
                         onvalue=1, offvalue=0, command = AtivaRoomResponse). grid(row=3, sticky=tk.W)
 
 
+#%% Menu da medição
+# Frame Pai Menuf
+
+# =========================   Botões fundamentais   ===========================
+Run  =     tk.Button(Menuf, text="    Run     ", font=('arial', 20, 'bold'), bg='green').place(x=1000, y=30)
+Checkout = tk.Button(Menuf, text="Checkout", font=('arial', 20, 'bold'), bg='purple').place(x=1000, y=130)
+Save =     tk.Button(Menuf, text="    Save    ", font=('arial', 20, 'bold'), bg='blue').place(x=1000, y=220)
+Exit =     tk.Button(Menuf, text="     Exit     ", font=('arial', 20, 'bold'), bg='red', command=iExit).place(x=1000, y=320)
+
+# ================   Checagem de níveis de entradas e saídas   ================
+
+# Canais de entrada
+lblInCh = tk.Label(Menuf, font=('arial', 17, 'bold'), text="Input Channels").place(x=55,y=30)
+lblInCh_min = tk.Label(Menuf, font=('arial', 14, 'italic'), text="Min. (dB)").place(x=45,y=70)
+lblInCh_max = tk.Label(Menuf, font=('arial', 14, 'italic'), text="Max. (dB)").place(x=145,y=70)
+lblInCh_1 = tk.Label(Menuf, font=('arial', 17, 'bold'), text="1").place(x=10,y=110)
+lblInCh_2 = tk.Label(Menuf, font=('arial', 17, 'bold'), text="2").place(x=10,y=150)
+lblInCh_3 = tk.Label(Menuf, font=('arial', 17, 'bold'), text="3").place(x=10,y=190)
+lblInCh_4 = tk.Label(Menuf, font=('arial', 17, 'bold'), text="4").place(x=10,y=230)
+InMin_1 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varInMin_1, state=tk.DISABLED).place(x=50,y=110)
+InMax_1 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varInMax_1, state=tk.DISABLED).place(x=150,y=110)
+InMin_2 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varInMin_2, state=tk.DISABLED).place(x=50,y=150)
+InMax_2 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varInMax_2, state=tk.DISABLED).place(x=150,y=150)
+InMin_3 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varInMin_3, state=tk.DISABLED).place(x=50,y=190)
+InMax_3 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varInMax_3, state=tk.DISABLED).place(x=150,y=190)
+InMin_4 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varInMin_4, state=tk.DISABLED).place(x=50,y=230)
+InMax_4 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varInMax_4, state=tk.DISABLED).place(x=150,y=230)
+
+#Canais de saída
+lblOutCh= tk.Label(Menuf, font=('arial', 17, 'bold'), text="Output Channels").place(x=350,y=30)
+lblOutCh_min = tk.Label(Menuf, font=('arial', 14, 'italic'), text="Min. (dB)").place(x=355,y=70)
+lblOutCh_max = tk.Label(Menuf, font=('arial', 14, 'italic'), text="Max. (dB)").place(x=455,y=70)
+OutMin_1 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varOutMin, state=tk.DISABLED).place(x=360,y=110)
+OutMax_1 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varOutMin, state=tk.DISABLED).place(x=460,y=110)
+
+#Botão de Limpar as variáveis de níveis
+Clear =     tk.Button(Menuf, text="     Clear     ", font=('arial', 17, 'bold'), bg='white', command=clearvars).place(x=225, y=300)
 
 
 
+
+
+
+
+
+
+
+#print(inChannels())
+#Sedex10 = main(inChannels(), outChannels(),...)
 
 root.mainloop()
