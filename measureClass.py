@@ -153,7 +153,8 @@ class measureTake():
             if i:
                 inChannel.append(j)
             j=j+1
-        self.measurementObject.outChannel = self.MS.outChannel[self.source][0]
+        if kind == 'newpoint':
+            self.measurementObject.outChannel = self.MS.outChannel[self.source][0]
         self.measurementObject.inChannel = inChannel # Ao redefinir a propriedade inChannelo o PyTTa já reajusta a lista channelName com os nomes antigos + nomes padrão para novos canais
         self.measurementObject.channelName = [MS.inChName[i-1] for i in inChannel] # Atribuiu os nomes corretos aos canais selecionados
 
@@ -239,7 +240,7 @@ class measureTake():
             j=0
             for i in self.channelStatus:
                 if i:
-                    self.channelName = [self.MS.inChName[j]]
+                    self.inChName = [self.MS.inChName[j]]
                 j=j+1
             for i in range(0,self.averages):
                 self.calibAverages.append(pytta.SignalObj(self.measuredTake[i].timeSignal[:,0],

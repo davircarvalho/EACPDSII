@@ -69,7 +69,7 @@ measureTake = m.measureTake(SM,
                                         'R2', # canal 2 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
                                         'R5', # canal 3 
                                         'R4'], # canal 4
-                            source = 'S3', # código de fonte a ser utilizado. Para fins de seleção dos canais de saída
+                            source = 'S1', # código de fonte a ser utilizado. Para fins de seleção dos canais de saída
                             excitation = 'varredura', # escolhe sinal de excitacão  disponível no Setup de Medição
                             tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
 #%% Cria nova tomada de medição do ruído de fundo
