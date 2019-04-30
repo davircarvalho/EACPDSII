@@ -24,7 +24,7 @@ class newMeasurement():
                  freqMin,
                  freqMax,
                  inChannel,
-                 channelName,
+                 inChName,
                  outChannel,
                  averages,
                  sourcesNumber,
@@ -38,7 +38,7 @@ class newMeasurement():
         self.freqMin = freqMin
         self.freqMax= freqMax
         self.inChannel = inChannel
-        self.channelName = channelName
+        self.inChName = inChName
         self.outChannel = outChannel
         self.averages = averages
         self.sourcesNumber = sourcesNumber
@@ -53,8 +53,8 @@ class newMeasurement():
                                                         freqMax=self.freqMax,
                                                         device=self.device,
                                                         inChannel=self.inChannel,
-                                                        outChannel=self.outChannel,
-                                                        channelName=self.channelName,
+                                                        outChannel=self.outChannel['S1'][0],
+                                                        channelName=self.inChName,
                                                         comment='varredura'),
                    'musica' : pytta.generate.measurement('playrec',
                                                         excitation=self.excitationSignals['musica'],
@@ -63,8 +63,8 @@ class newMeasurement():
                                                         freqMax=self.freqMax,
                                                         device=self.device,
                                                         inChannel=self.inChannel,
-                                                        outChannel=self.outChannel,
-                                                        channelName=self.channelName,
+                                                        outChannel=self.outChannel['S1'][0],
+                                                        channelName=self.inChName,
                                                         comment='musica'),
                    'fala' : pytta.generate.measurement('playrec',
                                                         excitation=self.excitationSignals['fala'],
@@ -73,8 +73,8 @@ class newMeasurement():
                                                         freqMax=self.freqMax,
                                                         device=self.device,
                                                         inChannel=self.inChannel,
-                                                        outChannel=self.outChannel,
-                                                        channelName=self.channelName,
+                                                        outChannel=self.outChannel['S1'][0],
+                                                        channelName=self.inChName,
                                                         comment='fala'),
                    'noisefloor' : pytta.generate.measurement('rec',
                                                          lengthDomain='time',
@@ -101,14 +101,14 @@ class Data():
     
     def __init__(self,MS):
         self.measuredData = {} # Cria o dicionário vazio que conterá todos os níveis de informação do nosso dia de medição
-        for sN in range(1,MS.sourcesNumber+1):
+        for sourceCode in MS.outChannel:
             for rN in range(1,MS.receiversNumber+1):
-                self.measuredData['S'+str(sN)+'R'+str(rN)] = {} # Insere as chaves referente as configurações fonte receptor
+                self.measuredData[sourceCode+'R'+str(rN)] = {} # Insere as chaves referente as configurações fonte receptor
                 for key in MS.excitationSignals:
-                    self.measuredData['S'+str(sN)+'R'+str(rN)][key] = {'binaural':0,'hc':0} # Insere as chaves referentes ao sinal de excitação e tipo de gravação
+                    self.measuredData[sourceCode+'R'+str(rN)][key] = {'binaural':0,'hc':0} # Insere as chaves referentes ao sinal de excitação e tipo de gravação
         self.measuredData['noisefloor'] = [] # Cria lista de medições de ruído de fundo
         self.measuredData['calibration'] = {} # Cria dicionário com os canais de entrada da medição
-        for chN in MS.channelName:
+        for chN in MS.inChName:
             self.measuredData['calibration'][chN] = [] # Cria uma lista de calibrações para cada canal
 
 #%% Classe das tomadas de medição
@@ -119,14 +119,17 @@ class measureTake():
                  kind,
                  channelStatus,
                  tempHumid,
-                 sourceReceiver=None,
+                 source=None,
+                 receiver=None,
                  excitation=None):
         self.tempHumid = tempHumid
-        self.tempHumid.start()
+        if self.tempHumid != None:
+            self.tempHumid.start()
         self.MS = MS
         self.kind = kind
         self.channelStatus = channelStatus
-        self.sourceReceiver = sourceReceiver
+        self.source = source
+        self.receiver = receiver
         if excitation == None:
             self.excitation = kind
         else:
@@ -150,8 +153,9 @@ class measureTake():
             if i:
                 inChannel.append(j)
             j=j+1
-        self.measurementObject.inChannel = inChannel # Ao redefinir a propriedade inChannelo o PyTTa já reajusto a lista channelName
-        self.measurementObject.channelName = [MS.channelName[i-1] for i in inChannel]
+        self.measurementObject.outChannel = self.MS.outChannel[self.source][0]
+        self.measurementObject.inChannel = inChannel # Ao redefinir a propriedade inChannelo o PyTTa já reajusta a lista channelName com os nomes antigos + nomes padrão para novos canais
+        self.measurementObject.channelName = [MS.inChName[i-1] for i in inChannel] # Atribuiu os nomes corretos aos canais selecionados
 
     def run(self):
         self.measuredTake = []
@@ -160,8 +164,10 @@ class measureTake():
             self.measuredTake.append(self.measurementObject.run())
             self.measuredTake[i].plot_time()
             # Adquire do LabJack U3 + EI1050 a temperatura e umidade relativa instantânea
-            self.measuredTake[i].temp, self.measuredTake[i].RH = self.tempHumid.read()
-#            self.measuredTake[i].temp, self.measuredTake[i].RH = (24,69)            
+            if self.tempHumid != None:
+                self.measuredTake[i].temp, self.measuredTake[i].RH = self.tempHumid.read()
+            else:
+                self.measuredTake[i].temp, self.measuredTake[i].RH = (None,None)
             
     def save(self,dataObj):
         # Desmembra o SignalObj measureTake de 4 canais em 3 SignalObj referentes ao arranjo biauricular 
@@ -176,9 +182,9 @@ class measureTake():
                     self.binaural.append(pytta.SignalObj(self.measuredTake[i].timeSignal[:,chcont:chcont+2],
                                                'time',
                                                samplingRate=self.measuredTake[i].samplingRate,
-                                               channelName=[self.MS.channelName[0],self.MS.channelName[1]],
+                                               channelName=[self.MS.inChName[0],self.MS.inChName[1]],
                                                comment=self.excitation))
-                    self.binaural[i].sourceReceiver = [self.sourceReceiver[0],self.sourceReceiver[1]]
+                    self.binaural[i].sourceReceiver = [self.source+self.receiver[0],self.source+self.receiver[1]]
                     self.binaural[i].temp = self.measuredTake[i].temp
                     self.binaural[i].RH = self.measuredTake[i].RH
                     self.binaural[i].timeStamp = self.measuredTake[i].timeStamp
@@ -188,9 +194,9 @@ class measureTake():
                     self.hc1.append(pytta.SignalObj(self.measuredTake[i].timeSignal[:,chcont],
                                           'time',
                                           samplingRate=self.measuredTake[i].samplingRate,
-                                          channelName=[self.MS.channelName[2]],
+                                          channelName=[self.MS.inChName[2]],
                                           comment=self.excitation))
-                    self.hc1[i].sourceReceiver = self.sourceReceiver[2]
+                    self.hc1[i].sourceReceiver = self.source+self.receiver[2]
                     self.hc1[i].temp = self.measuredTake[i].temp
                     self.hc1[i].RH = self.measuredTake[i].RH
                     self.hc1[i].timeStamp = self.measuredTake[i].timeStamp
@@ -200,9 +206,9 @@ class measureTake():
                     self.hc2.append(pytta.SignalObj(self.measuredTake[i].timeSignal[:,chcont],
                                           'time',
                                           samplingRate=self.measuredTake[i].samplingRate,
-                                          channelName=[self.MS.channelName[3]],
+                                          channelName=[self.MS.inChName[3]],
                                           comment=self.excitation))
-                    self.hc2[i].sourceReceiver = self.sourceReceiver[3]
+                    self.hc2[i].sourceReceiver = self.source+self.receiver[3]
                     self.hc2[i].temp = self.measuredTake[i].temp
                     self.hc2[i].RH = self.measuredTake[i].RH
                     self.hc2[i].timeStamp = self.measuredTake[i].timeStamp        
@@ -233,17 +239,18 @@ class measureTake():
             j=0
             for i in self.channelStatus:
                 if i:
-                    self.channelName = [self.MS.channelName[j]]
+                    self.channelName = [self.MS.inChName[j]]
                 j=j+1
             for i in range(0,self.averages):
                 self.calibAverages.append(pytta.SignalObj(self.measuredTake[i].timeSignal[:,0],
                                       'time',
                                       samplingRate=self.measuredTake[i].samplingRate,
-                                      channelName=self.channelName,
+                                      channelName=self.inChName,
                                       comment=self.excitation))
 #                self.calibAverages[i].sourceReceiver = self.sourceReceiver[2]
                 self.calibAverages[i].temp = self.measuredTake[i].temp
                 self.calibAverages[i].RH = self.measuredTake[i].RH
                 self.calibAverages[i].timeStamp = self.measuredTake[i].timeStamp
-            dataObj.measuredData['calibration'][self.channelName[0]].append(self.calibAverages)
-        self.tempHumid.stop()
+            dataObj.measuredData['calibration'][self.inChName[0]].append(self.calibAverages)
+        if self.tempHumid != None:
+            self.tempHumid.stop()
