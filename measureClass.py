@@ -9,6 +9,7 @@ Created on Wed Apr 16 21:48:23 2019
 #%% Importando bibliotecas
 
 import pytta
+import numpy as np
 
 import copy as cp
 
@@ -100,6 +101,7 @@ class newMeasurement():
 class Data():
     
     def __init__(self,MS):
+        self.MS = MS
         self.measuredData = {} # Cria o dicionário vazio que conterá todos os níveis de informação do nosso dia de medição
         for sourceCode in MS.outChannel:
             for rN in range(1,MS.receiversNumber+1):
@@ -110,6 +112,23 @@ class Data():
         self.measuredData['calibration'] = {} # Cria dicionário com os canais de entrada da medição
         for chN in MS.inChName:
             self.measuredData['calibration'][chN] = [] # Cria uma lista de calibrações para cada canal
+            
+    def dummyFill(self):
+        # Preenche o dicionário de dados medidos com sinais nulos.
+        dummyFill = cp.deepcopy(self.MS.excitationSignals)
+        for key in dummyFill:
+            dummyFill[key].timeSignal = dummyFill[key].timeSignal*0
+        dummyFill['noisefloor'] = pytta.SignalObj(np.zeros(self.MS.noiseFloorTp*self.MS.samplingRate),domain='time',samplingRate=self.MS.samplingRate)
+        dummyFill['calibration'] = pytta.SignalObj(np.zeros(self.MS.calibrationTp*self.MS.samplingRate),domain='time',samplingRate=self.MS.samplingRate) 
+        for sourceCode in self.MS.outChannel:
+            for rN in range(1,self.MS.receiversNumber+1):
+#                self.measuredData[sourceCode+'R'+str(rN)] = {} # Insere as chaves referente as configurações fonte receptor
+                for key in self.MS.excitationSignals:
+                    self.measuredData[sourceCode+'R'+str(rN)][key] = {'binaural':cp.deepcopy([dummyFill[key],dummyFill[key],dummyFill[key]]),'hc':cp.deepcopy([dummyFill[key],dummyFill[key],dummyFill[key]])} # Insere as chaves referentes ao sinal de excitação e tipo de gravação
+        self.measuredData['noisefloor'] = cp.deepcopy([[dummyFill['noisefloor'],dummyFill['noisefloor'],dummyFill['noisefloor']],[dummyFill['noisefloor'],dummyFill['noisefloor'],dummyFill['noisefloor']]]) # Cria lista de medições de ruído de fundo
+        self.measuredData['calibration'] = {} # Cria dicionário com os canais de entrada da medição
+        for chN in self.MS.inChName:
+            self.measuredData['calibration'][chN] = cp.deepcopy([[dummyFill['calibration'],dummyFill['calibration'],dummyFill['calibration']],[dummyFill['calibration'],dummyFill['calibration'],dummyFill['calibration']]]) # Cria uma lista de calibrações para cada canal
 
 #%% Classe das tomadas de medição
 class measureTake():
@@ -163,7 +182,7 @@ class measureTake():
 #        if self.kind == 'newpoint':
         for i in range(0,self.averages):
             self.measuredTake.append(self.measurementObject.run())
-            self.measuredTake[i].plot_time()
+#            self.measuredTake[i].plot_time()
             # Adquire do LabJack U3 + EI1050 a temperatura e umidade relativa instantânea
             if self.tempHumid != None:
                 self.measuredTake[i].temp, self.measuredTake[i].RH = self.tempHumid.read()
@@ -185,7 +204,11 @@ class measureTake():
                                                samplingRate=self.measuredTake[i].samplingRate,
                                                channelName=[self.MS.inChName[0],self.MS.inChName[1]],
                                                comment=self.excitation))
-                    self.binaural[i].sourceReceiver = [self.source+self.receiver[0],self.source+self.receiver[1]]
+                    if self.kind == 'noisefloor': 
+                        SR = [self.receiver[0],self.receiver[1]] 
+                    else: 
+                        SR = [self.source+self.receiver[0],self.source+self.receiver[1]]
+                    self.binaural[i].sourceReceiver = SR
                     self.binaural[i].temp = self.measuredTake[i].temp
                     self.binaural[i].RH = self.measuredTake[i].RH
                     self.binaural[i].timeStamp = self.measuredTake[i].timeStamp
@@ -197,7 +220,11 @@ class measureTake():
                                           samplingRate=self.measuredTake[i].samplingRate,
                                           channelName=[self.MS.inChName[2]],
                                           comment=self.excitation))
-                    self.hc1[i].sourceReceiver = self.source+self.receiver[2]
+                    if self.kind == 'noisefloor': 
+                        SR = self.receiver[2]
+                    else: 
+                        SR = self.source+self.receiver[2]
+                    self.hc1[i].sourceReceiver = SR
                     self.hc1[i].temp = self.measuredTake[i].temp
                     self.hc1[i].RH = self.measuredTake[i].RH
                     self.hc1[i].timeStamp = self.measuredTake[i].timeStamp
@@ -209,7 +236,11 @@ class measureTake():
                                           samplingRate=self.measuredTake[i].samplingRate,
                                           channelName=[self.MS.inChName[3]],
                                           comment=self.excitation))
-                    self.hc2[i].sourceReceiver = self.source+self.receiver[3]
+                    if self.kind == 'noisefloor': 
+                        SR = self.receiver[3]
+                    else: 
+                        SR = self.source+self.receiver[3]
+                    self.hc2[i].sourceReceiver = SR
                     self.hc2[i].temp = self.measuredTake[i].temp
                     self.hc2[i].RH = self.measuredTake[i].RH
                     self.hc2[i].timeStamp = self.measuredTake[i].timeStamp        

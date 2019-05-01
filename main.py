@@ -47,7 +47,7 @@ SM = m.newMeasurement(name = 'Medição teste', # Nome da medição
                                    'S2':([2],'Dodecaedro 2'),
                                    'S3':([3,4],'Sistema da sala')}, # Dicionário com códigos e canais de saída associados
                      averages = 3, # Número de médias por medição (FALTA IMPLEMENTAR)
-                     sourcesNumber = 2, # Número de fontes; dodecaedro e p.a. local
+                     sourcesNumber = 3, # Número de fontes; dodecaedro e p.a. local
                      receiversNumber = 5, # Número de receptores
                      noiseFloorTp = 2, # [s] tempo de gravação do ruído de fundo
                      calibrationTp = 2) # [s] tempo de gravação do sinal de calibração
@@ -85,8 +85,8 @@ measureTake = m.measureTake(SM,
                             # Obs. 2: para kind = 'noisefloor' não há fonte
                             receiver = ['R2', # canal 1 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
                                         'R2', # canal 2 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
-                                        'R4'], # canal 4
-                                        'R5', # canal 3 
+                                        'R4', # canal 4
+                                        'R5'], # canal 3 
                             tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
 #%% Cria nova tomada de medição para calibração
 measureTake = m.measureTake(SM,
