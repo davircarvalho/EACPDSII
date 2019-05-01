@@ -46,7 +46,7 @@ SM = m.newMeasurement(name = 'Medição teste', # Nome da medição
                      outChannel = {'S1':([1],'Dodecaedro 1'),
                                    'S2':([2],'Dodecaedro 2'),
                                    'S3':([3,4],'Sistema da sala')}, # Dicionário com códigos e canais de saída associados
-                     averages = 3, # Número de médias por medição (FALTA IMPLEMENTAR)
+                     averages = 3, # Número de médias por medição
                      sourcesNumber = 3, # Número de fontes; dodecaedro e p.a. local
                      receiversNumber = 5, # Número de receptores
                      noiseFloorTp = 2, # [s] tempo de gravação do ruído de fundo
@@ -67,8 +67,8 @@ measureTake = m.measureTake(SM,
                             # Obs. 1: manter itens da lista para canais Desativados
                             receiver = ['R2', # canal 1 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
                                         'R2', # canal 2 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
-                                        'R5', # canal 3 
-                                        'R4'], # canal 4
+                                        'R4', # canal 3 
+                                        'R5'], # canal 4
                             source = 'S1', # código de fonte a ser utilizado. Para fins de seleção dos canais de saída
                             excitation = 'varredura', # escolhe sinal de excitacão  disponível no Setup de Medição
                             tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050

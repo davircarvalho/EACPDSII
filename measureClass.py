@@ -10,7 +10,6 @@ Created on Wed Apr 16 21:48:23 2019
 
 import pytta
 import numpy as np
-
 import copy as cp
 
 #%% Classe da medição
@@ -103,15 +102,22 @@ class Data():
     def __init__(self,MS):
         self.MS = MS
         self.measuredData = {} # Cria o dicionário vazio que conterá todos os níveis de informação do nosso dia de medição
-        for sourceCode in MS.outChannel:
-            for rN in range(1,MS.receiversNumber+1):
+        self.status = {} # Cria o dicionário vazio que conterá o status de cada ponto de medição
+        # Gerando chaves para configurações fonte-receptor
+        for sourceCode in self.MS.outChannel:
+            for rN in range(1,self.MS.receiversNumber+1):
                 self.measuredData[sourceCode+'R'+str(rN)] = {} # Insere as chaves referente as configurações fonte receptor
+                self.status[sourceCode+'R'+str(rN)] = {}
                 for key in MS.excitationSignals:
-                    self.measuredData[sourceCode+'R'+str(rN)][key] = {'binaural':0,'hc':0} # Insere as chaves referentes ao sinal de excitação e tipo de gravação
+                    self.measuredData[sourceCode+'R'+str(rN)][key] = {'binaural':0,'hc':0} # Insere as chaves referentes ao sinal de excitação e tipo de gravação            
+                    self.status[sourceCode+'R'+str(rN)][key] = {'binaural':False,'hc':False}
         self.measuredData['noisefloor'] = [] # Cria lista de medições de ruído de fundo
+        self.status['noisefloor'] = False
         self.measuredData['calibration'] = {} # Cria dicionário com os canais de entrada da medição
-        for chN in MS.inChName:
+        self.status['calibration'] = {}
+        for chN in self.MS.inChName:
             self.measuredData['calibration'][chN] = [] # Cria uma lista de calibrações para cada canal
+            self.status['calibration'][chN] = False
             
     def dummyFill(self):
         # Preenche o dicionário de dados medidos com sinais nulos.
@@ -129,7 +135,48 @@ class Data():
         self.measuredData['calibration'] = {} # Cria dicionário com os canais de entrada da medição
         for chN in self.MS.inChName:
             self.measuredData['calibration'][chN] = cp.deepcopy([[dummyFill['calibration'],dummyFill['calibration'],dummyFill['calibration']],[dummyFill['calibration'],dummyFill['calibration'],dummyFill['calibration']]]) # Cria uma lista de calibrações para cada canal
-
+            
+    def getStatus(self):
+        statusStr = ''
+        cEnd = '\x1b[0m'
+        cHeader = '\x1b[1;35;43m'
+        cHeader2 = '\x1b[1;30;43m'
+        cAll = '\x1b[0;30;46m'
+        cTrue = '\x1b[3;30;42m'
+        cFalse = '\x1b[3;30;41m'
+        for key in self.status:
+            statusStr = statusStr+cHeader+'            '+key+'            '+cEnd+'\n'
+            if key == 'noisefloor':
+                if self.status[key]:
+                    cNF = cTrue
+                else:
+                    cNF = cFalse
+                statusStr = statusStr+''+cNF+str(self.status[key])+cEnd+'\n'
+            elif key == 'calibration':
+                for ch in self.status[key]:
+                    if self.status[key][ch]:
+                        cCal = cTrue
+                    else:
+                        cCal = cFalse
+                    statusStr = statusStr+cAll+ch+':'+cEnd+' '+cCal+str(self.status[key][ch])+cEnd+'\n'
+#                statusStr = statusStr+'\n'
+            else:
+                for sig in self.status[key]:
+                    statusStr = statusStr+cHeader2+sig+'\n'+cEnd
+                    if self.status[key][sig]['binaural']:
+                        cBin = cTrue
+                    else:
+                        cBin = cFalse
+                    if self.status[key][sig]['hc']:
+                        cHc = cTrue
+                    else:
+                        cHc = cFalse
+                    statusStr = statusStr+cAll+'binaural:'+cEnd+' '+cBin+str(self.status[key][sig]['binaural'])+cEnd+' '
+                    statusStr = statusStr+cAll+'h.c.:'+cEnd+' '+cHc+str(self.status[key][sig]['hc'])+cEnd+'\n'
+#                statusStr = statusStr+'\n'
+#            statusStr = statusStr+'______________________________\n'
+                
+        return print(statusStr)
 #%% Classe das tomadas de medição
 class measureTake():
     
@@ -250,10 +297,13 @@ class measureTake():
             # Adiciona cada uma das três posições de receptor da última tomada de medição     
             if self.channelStatus[0] and self.channelStatus[1]:
                 dataObj.measuredData[self.binaural[0].sourceReceiver[0]][self.binaural[0].comment]['binaural'] = self.binaural
+                dataObj.status[self.binaural[0].sourceReceiver[0]][self.binaural[0].comment]['binaural'] = True
             if self.channelStatus[2]:
                 dataObj.measuredData[self.hc1[0].sourceReceiver][self.hc1[0].comment]['hc'] = self.hc1
+                dataObj.status[self.hc1[0].sourceReceiver][self.hc1[0].comment]['hc'] = True
             if self.channelStatus[3]:
                 dataObj.measuredData[self.hc2[0].sourceReceiver][self.hc2[0].comment]['hc'] = self.hc2
+                dataObj.status[self.hc2[0].sourceReceiver][self.hc2[0].comment]['hc'] = True
                 
         if self.kind == 'noisefloor':
             newNF = {}
@@ -264,6 +314,7 @@ class measureTake():
             if self.channelStatus[3]:
                 newNF[self.hc2[0].sourceReceiver] = self.hc2
             dataObj.measuredData['noisefloor'].append(newNF)
+            dataObj.status['noisefloor'] = True
             
         if self.kind == 'calibration':
             self.calibAverages = []
@@ -284,5 +335,6 @@ class measureTake():
                 self.calibAverages[i].RH = self.measuredTake[i].RH
                 self.calibAverages[i].timeStamp = self.measuredTake[i].timeStamp
             dataObj.measuredData['calibration'][self.inChName[0]].append(self.calibAverages)
+            dataObj.status['calibration'][self.inChName[0]] = True
         if self.tempHumid != None:
             self.tempHumid.stop()
