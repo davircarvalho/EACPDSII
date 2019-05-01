@@ -11,6 +11,8 @@ Created on Wed Apr 16 21:48:23 2019
 import pytta
 import numpy as np
 import copy as cp
+import time
+import pickle
 
 #%% Classe da medição
 
@@ -131,10 +133,13 @@ class Data():
 #                self.measuredData[sourceCode+'R'+str(rN)] = {} # Insere as chaves referente as configurações fonte receptor
                 for key in self.MS.excitationSignals:
                     self.measuredData[sourceCode+'R'+str(rN)][key] = {'binaural':cp.deepcopy([dummyFill[key],dummyFill[key],dummyFill[key]]),'hc':cp.deepcopy([dummyFill[key],dummyFill[key],dummyFill[key]])} # Insere as chaves referentes ao sinal de excitação e tipo de gravação
+                    self.status[sourceCode+'R'+str(rN)][key] = {'binaural':True,'hc':True} # Insere as chaves referentes ao sinal de excitação e tipo de gravação
         self.measuredData['noisefloor'] = cp.deepcopy([[dummyFill['noisefloor'],dummyFill['noisefloor'],dummyFill['noisefloor']],[dummyFill['noisefloor'],dummyFill['noisefloor'],dummyFill['noisefloor']]]) # Cria lista de medições de ruído de fundo
+        self.status['noisefloor'] = True # Cria lista de medições de ruído de fundo
         self.measuredData['calibration'] = {} # Cria dicionário com os canais de entrada da medição
         for chN in self.MS.inChName:
             self.measuredData['calibration'][chN] = cp.deepcopy([[dummyFill['calibration'],dummyFill['calibration'],dummyFill['calibration']],[dummyFill['calibration'],dummyFill['calibration'],dummyFill['calibration']]]) # Cria uma lista de calibrações para cada canal
+            self.status['calibration'][chN] = True
             
     def getStatus(self):
         statusStr = ''
@@ -338,3 +343,18 @@ class measureTake():
             dataObj.status['calibration'][self.inChName[0]] = True
         if self.tempHumid != None:
             self.tempHumid.stop()
+    
+def save(MS,D,filename):
+    timeStamp = time.ctime(time.time())
+    saveDict = {'MS':MS,'Data':D,'Timestamp':timeStamp}
+    # write python dict to a file
+    output = open(filename+'.pkl', 'wb')
+    pickle.dump(saveDict,output)
+    output.close()
+    
+def load(filename):
+    #%% read python dict back from the file
+    pkl_file = open(filename+'.pkl', 'rb')
+    loadDict = pickle.load(pkl_file)
+    pkl_file.close()
+    return loadDict['MS'],loadDict['Data']

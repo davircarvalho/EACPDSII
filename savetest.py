@@ -11,7 +11,7 @@ import pickle
 
 #%% write python dict to a file
 output = open('myfile.pkl', 'wb')
-pickle.dump(D.measuredData, output)
+pickle.dump({1:D.measuredData}, output)
 output.close()
 
 #%% read python dict back from the file

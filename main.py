@@ -103,3 +103,9 @@ measureTake.run()
 
 #%% Salva tomada de medição no objeto de dados D
 measureTake.save(D)
+
+#%% Salva dados medidos e setup de medição para um arquivo pickle
+m.save(SM,D,'Medicao_01')
+
+#%% Carrega dados medidos e setup de medição do arquivo
+SM, D = m.load('Medicao_01')
