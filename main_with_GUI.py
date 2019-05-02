@@ -181,63 +181,81 @@ class takeWindow(object):
     
     #========= Condicionando Checkbutton das Fontes =========
     def AtivaDodec1(self):
-        if self.var5.get():
-            if self.var6.get():
-                self.var6.set(False)
-#                Dodecaedro 2 desligado
-            if self.var7.get():
-                self.var7.set(False)
-#                P.A desligado
+        if self.var11.get() or self.var12.get():
+            self.var5.set(False)
+        else:
+            if self.var5.get():
+                if self.var6.get():
+                    self.var6.set(False)
+    #                Dodecaedro 2 desligado
+                if self.var7.get():
+                    self.var7.set(False)
+    #                P.A desligado
                 
     def AtivaDodec2(self):
-        if self.var6.get():
-            if self.var5.get():
-                self.var5.set(False)
-            if self.var7.get():
-                self.var7.set(False)
+        if self.var11.get() or self.var12.get():
+            self.var6.set(False)
+        else:
+            if self.var6.get():
+                if self.var5.get():
+                    self.var5.set(False)
+                if self.var7.get():
+                    self.var7.set(False)
                 
     def AtivaPA(self):
-        if self.var7.get():
-            if self.var5.get():
-                self.var5.set(False)
-            if self.var6.get():
-                self.var6.set(False)
+        if self.var11.get() or self.var12.get():
+            self.var7.set(False)
+        else:
+            if self.var7.get():
+                if self.var5.get():
+                    self.var5.set(False)
+                if self.var6.get():
+                    self.var6.set(False)
     
     def AtivaSweep(self):
-        if self.var8.get():
-            if self.var9.get():
-                self.var9.set(False)
-#                Ruído de desativada
-            if self.var10.get():
-                self.var10.set(False)
-#                Room Response desativada
+        if self.var11.get() or self.var12.get():
+            self.var8.set(False)
+        else:
+            if self.var8.get():
+                if self.var9.get():
+                    self.var9.set(False)
+    #                Ruído de desativada
+                if self.var10.get():
+                    self.var10.set(False)
+    #                Room Response desativada
                 
     #========= Condicionando Checkbutton dos Sinais =========
     def AtivaFala(self):
-        if self.var9.get():
-            if self.var8.get():
-                self.var8.set(False)
-#                Calibração desativada
-            if self.var10.get():
-                self.var10.set(False)
-#                Room response desativada
+        if self.var11.get() or self.var12.get():
+            self.var9.set(False)
+        else:
+            if self.var9.get():
+                if self.var8.get():
+                    self.var8.set(False)
+    #                Calibração desativada
+                if self.var10.get():
+                    self.var10.set(False)
+    #                Room response desativada
                 
     def AtivaMusica(self):
-        if self.var10.get():
-            if self.var8.get():
-                self.var8.set(False)
-            if self.var9.get():
-                self.var9.set(False)
+        if self.var11.get() or self.var12.get():
+            self.var10.set(False)
+        else:
+            if self.var10.get():
+                if self.var8.get():
+                    self.var8.set(False)
+                if self.var9.get():
+                    self.var9.set(False)
     
     
     #========= Condicionando Checkbutton dos tipos de medição (template) =========
     def AtivaCalibracao(self):
-    #    var5.set(0);    Out1.deselect()
-    #    var6.set(0);    Out2.deselect()
-    #    var7.set(0);    Out3.deselect()
-    #    var8.set(0);    signal1.deselect()
-    #    var9.set(0);    signal2.deselect()
-    #    var10.set(0);   signal3.deselect()
+        self.var5.set(False)
+        self.var6.set(False)
+        self.var7.set(False)
+        self.var8.set(False)
+        self.var9.set(False)
+        self.var10.set(False)
         if self.var11.get():
             if self.var12.get():
                 self.var12.set(False)
@@ -247,12 +265,12 @@ class takeWindow(object):
 #                Room response desativada
          
     def AtivaRuidoDeFundo(self):
-    #    var5.set(0);    Out1.deselect()
-    #    var6.set(0);    Out2.deselect()
-    #    var7.set(0);    Out3.deselect()
-    #    var8.set(0);    signal1.deselect()
-    #    var9.set(0);    signal2.deselect()
-    #    var10.set(0);   signal3.deselect()
+        self.var5.set(False)
+        self.var6.set(False)
+        self.var7.set(False)
+        self.var8.set(False)
+        self.var9.set(False)
+        self.var10.set(False)
         if self.var12.get():
             if self.var11.get():
                 self.var11.set(False)
