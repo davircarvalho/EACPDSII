@@ -75,79 +75,87 @@ def inChannels():
     inputs=[var1.get(), var2.get(), var3.get(), var4.get()]
     return inputs
 
+#==================== Condicionando sinais de saída =========================
+def outChannels():
+    outputs=[var5.get(), var6.get(), var7.get()]
+    return outputs
 
+#==================== Condicionando sinais de saída =========================
+def SignalSelect():
+    signal=[var5.get(), var6.get(), var7.get()]
+    return signal
 
 #========= Condicionando Checkbutton dos Sinais =========
 def AtivaDodec1():
-    if var5.get()==1:
+    if var5.get():
         print("Dodecaedro 1 ligado")
-        if var6.get()==1:
-            var6.set(0)
+        if var6.get():
+            var6.set(False)
             Out2.deselect()
             print("Dodecaedro 2 desligado")
-        if var7.get()==1:
-            var7.set(0)
+        if var7.get():
+            var7.set(False)
             Out3.deselect()
             print("P.A desligado")
             
 def AtivaDodec2():
-    if var6.get()==1:
+    if var6.get():
         print("Dodecaedro 2 ligado")
-        if var5.get()==1:
-            var5.set(0)
+        if var5.get():
+            var5.set(False)
             Out1.deselect()
             print("Dodecaedro 1 desligado")
-        if var7.get()==1:
-            var7.set(0)
+        if var7.get():
+            var7.set(False)
             Out3.deselect()
             print("P.A desligado")
             
 def AtivaPA():
-    if var7.get()==1:
+    if var7.get():
         print("P.A ligado")
-        if var5.get()==1:
-            var5.set(0)
+        if var5.get():
+            var5.set(False)
             Out1.deselect()
             print("Dodecaedro 1 desligado")
-        if var6.get()==1:
-            var6.set(0)
+        if var6.get():
+            var6.set(False)
             Out2.deselect()
             print("Dodecaedro 2 desligado")
 
 #========= Condicionando Checkbutton dos Sinais =========
 def AtivaSweep():
-    if var8.get()==1:
+    if var8.get():
         print("Sinal de fala seleciondo")
-        if var9.get()==1:
-            var9.set(0)
+        if var9.get():
+            var9.set(False)
             Signal2.deselect()
             print("Ruído de desativada")
-        if var10.get()==1:
-            var10.set(0)
+        if var10.get():
+            var10.set(False)
             Signal3.deselect()
             print("Room Response desativada")
             
 def AtivaFala():
-    if var9.get()==1:
+    if var9.get():
         print("Ruído de fundo ativada")
-        if var8.get()==1:
-            var8.set(0)
+        if var8.get():
+            var8.set(False)
             Signal1.deselect()
             print("Calibração desativada")
-        if var10.get()==1:
-            var10.set(0)
+        if var10.get():
+            var10.set(False)
             Signal3.deselect()
             print("Room response desativada")
             
 def AtivaMusica():
-    if var10.get()==1:
+    if var10.get():
         print("Room response ativada")
-        if var8.get()==1:
-            var8.set(0)
+        if var8.get():
+            var8.set(False)
             Signal1.deselect()
             print("Calibração desativada")
-        if var9.get()==1:
-            var9.set(0)
+        if var9.get():
+            var9.set(False)
             Signal2.deselect()
             print("Ruído de fundo desativada")
 
@@ -160,14 +168,14 @@ def AtivaCalibracao():
 #    var8.set(0);    Signal1.deselect()
 #    var9.set(0);    Signal2.deselect()
 #    var10.set(0);   Signal3.deselect()
-    if var11.get()==1:
+    if var11.get():
         print("Calibração ativada")
-        if var12.get()==1:
-            var12.set(0)
+        if var12.get():
+            var12.set(False)
             Template2.deselect()
             print("Ruído de desativada")
-        if var13.get()==1:
-            var13.set(0)
+        if var13.get():
+            var13.set(False)
             Template3.deselect()
         print("Room Response desativada")
      
@@ -178,26 +186,26 @@ def AtivaRuidoDeFundo():
 #    var8.set(0);    Signal1.deselect()
 #    var9.set(0);    Signal2.deselect()
 #    var10.set(0);   Signal3.deselect()
-    if var12.get()==1:
+    if var12.get():
         print("Ruído de fundo ativada")
-        if var11.get()==1:
-            var11.set(0)
+        if var11.get():
+            var11.set(False)
             Template1.deselect()
             print("Calibração desativada")
-        if var13.get()==1:
-            var13.set(0)
+        if var13.get():
+            var13.set(False)
             Template3.deselect()
             print("Room response desativada")
 
 def AtivaRoomResponse():
-    if var13.get()==1:
+    if var13.get():
         print("Room response ativada")
-        if var11.get()==1:
-            var11.set(0)
+        if var11.get():
+            var11.set(False)
             Template1.deselect()
             print("Calibração desativada")
-        if var12.get()==1:
-            var12.set(0)
+        if var12.get():
+            var12.set(False)
             Template2.deselect()
             print("Ruído de fundo desativada")
 def MSG():
@@ -210,15 +218,16 @@ var1=tk.BooleanVar()
 var2=tk.BooleanVar()
 var3=tk.BooleanVar()
 var4=tk.BooleanVar()
-var5=tk.IntVar()
-var6=tk.IntVar()
-var7=tk.IntVar()
-var8=tk.IntVar()
-var9=tk.IntVar()
-var10=tk.IntVar()
+var5=tk.BooleanVar()
+var6=tk.BooleanVar()
+var7=tk.BooleanVar()
+var8=tk.BooleanVar()
+var9=tk.BooleanVar()
+var10=tk.BooleanVar()
 var11=tk.IntVar()
 var12=tk.IntVar()
 var13=tk.IntVar()
+var14=tk.BooleanVar()
 varInMin_1 = tk.StringVar()
 varInMax_1 = tk.StringVar()
 varInMin_2 = tk.StringVar()
@@ -269,11 +278,11 @@ In4 = tk.Checkbutton(Inf, text="4 - Mic. 2", variable=var4, onvalue=True, offval
 lblOutput = tk.Label(Outf, font=('arial', 15, 'italic'), bg='black', fg='white',
                  text="Output channels", bd = 4, width=23).grid(row=0, column=0)
 
-Out1 = tk.Checkbutton(Outf, text="1 - OmniSource 1", variable=var5, onvalue=1, offvalue=0, \
+Out1 = tk.Checkbutton(Outf, text="1 - OmniSource 1", variable=var5, onvalue=True, offvalue=False, \
                     font=('arial', 20, 'bold'), command = AtivaDodec1).grid(row=1, sticky=tk.W)
-Out2 = tk.Checkbutton(Outf, text="2 - OmniSource 2", variable=var6,  onvalue=1, offvalue=0, \
+Out2 = tk.Checkbutton(Outf, text="2 - OmniSource 2", variable=var6,  onvalue=True, offvalue=False, \
                     font=('arial', 20, 'bold'), command = AtivaDodec2).grid(row=2, sticky=tk.W)
-Out3 = tk.Checkbutton(Outf, text="3 - P.A", variable=var7, onvalue=1, offvalue=0, \
+Out3 = tk.Checkbutton(Outf, text="3 - P.A", variable=var7, onvalue=True, offvalue=False, \
                     font=('arial', 20, 'bold'), command = AtivaPA).grid(row=3, sticky=tk.W)
 
 
@@ -283,11 +292,11 @@ Out3 = tk.Checkbutton(Outf, text="3 - P.A", variable=var7, onvalue=1, offvalue=0
 lblOutput = tk.Label(Sigsf, font=('arial', 15, 'italic'), bg='black', fg='white',
                  text="Excitation signal", bd = 4, width=23).grid(row=0, column=0)
 
-Signal1 = tk.Checkbutton(Sigsf, text="Exponential Sweep", variable=var8, onvalue=1, offvalue=0, \
+Signal1 = tk.Checkbutton(Sigsf, text="Exponential Sweep", variable=var8, onvalue=True, offvalue=False, \
                     font=('arial', 20, 'bold'), command=AtivaSweep). grid(row=1, sticky=tk.W)
-Signal2 = tk.Checkbutton(Sigsf, text="Speech", variable=var9, onvalue=1, offvalue=0, \
+Signal2 = tk.Checkbutton(Sigsf, text="Speech", variable=var9, onvalue=True, offvalue=False, \
                     font=('arial', 20, 'bold'), command=AtivaFala). grid(row=3, sticky=tk.W)
-Signal3 = tk.Checkbutton(Sigsf, text="Music", variable=var10,  onvalue=1, offvalue=0, \
+Signal3 = tk.Checkbutton(Sigsf, text="Music", variable=var10,  onvalue=True, offvalue=False, \
                     font=('arial', 20, 'bold'), command=AtivaMusica). grid(row=2, sticky=tk.W)
 
 
@@ -299,11 +308,11 @@ lblTemplate = tk.Label(Tempf, font=('arial', 15, 'italic'), bg='black', fg='whit
 
 
 Template1 = tk.Checkbutton(Tempf, text="Calibration", font=('arial', 20, 'bold'), variable = var11, \
-                        onvalue=1, offvalue=0, command = AtivaCalibracao). grid(row=1, sticky=tk.W)
+                        onvalue=True, offvalue=False, command = AtivaCalibracao). grid(row=1, sticky=tk.W)
 Template2 = tk.Checkbutton(Tempf, text="Noise floor", font=('arial', 20, 'bold'), variable = var12, \
-                        onvalue=1, offvalue=0, command = AtivaRuidoDeFundo). grid(row=2, sticky=tk.W)
+                        onvalue=True, offvalue=False, command = AtivaRuidoDeFundo). grid(row=2, sticky=tk.W)
 Template3 = tk.Checkbutton(Tempf, text="Room response", font=('arial', 20, 'bold'), variable = var13, \
-                        onvalue=1, offvalue=0, command = AtivaRoomResponse). grid(row=3, sticky=tk.W)
+                        onvalue=True, offvalue=False, command = AtivaRoomResponse). grid(row=3, sticky=tk.W)
 
 
 #%% Menu da medição
@@ -335,25 +344,31 @@ InMin_4 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariabl
 InMax_4 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varInMax_4, state=tk.DISABLED).place(x=150,y=230)
 
 #Canais de saída
-lblOutCh= tk.Label(Menuf, font=('arial', 17, 'bold'), text="Output Channels").place(x=350,y=30)
-lblOutCh_min = tk.Label(Menuf, font=('arial', 14, 'italic'), text="Min. (dB)").place(x=355,y=70)
-lblOutCh_max = tk.Label(Menuf, font=('arial', 14, 'italic'), text="Max. (dB)").place(x=455,y=70)
-OutMin_1 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varOutMin, state=tk.DISABLED).place(x=360,y=110)
-OutMax_1 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varOutMin, state=tk.DISABLED).place(x=460,y=110)
+lblOutCh= tk.Label(Menuf, font=('arial', 17, 'bold'), text="Output Channels").place(x=290,y=30)
+lblOutCh_min = tk.Label(Menuf, font=('arial', 14, 'italic'), text="Min. (dB)").place(x=295,y=70)
+lblOutCh_max = tk.Label(Menuf, font=('arial', 14, 'italic'), text="Max. (dB)").place(x=395,y=70)
+OutMin_1 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varOutMin, state=tk.DISABLED).place(x=300,y=110)
+OutMax_1 = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varOutMin, state=tk.DISABLED).place(x=400,y=110)
 
 #Botão de Limpar as variáveis de níveis
-Clear =     tk.Button(Menuf, text="     Clear     ", font=('arial', 17, 'bold'), bg='white', command=clearvars).place(x=225, y=300)
+Clear =     tk.Button(Menuf, text="     Clear     ", font=('arial', 17, 'bold'), bg='white', command=clearvars).place(x=175, y=300)
+
+
+
+#Nova medição
+newmeasurement = tk.Checkbutton(Menuf, text=" New Measurment", font=('arial', 20, 'bold'), variable = var14, \
+                        onvalue=True, offvalue=False, command = AtivaCalibracao).place(x=550, y=30)
+if newmeasurement:
+    newmeasurement_name = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varOutMin, state=tk.DISABLED).place(x=400,y=110)
 
 
 
 
 
 
-
-
-
-
+#print(SignalSelect())
+#print(outChannels())
 #print(inChannels())
-#Sedex10 = main(inChannels(), outChannels(),...)
+#Sedex10 = main(inChannels(), outChannels(), SignalSelect())
 
 root.mainloop()
