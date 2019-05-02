@@ -88,10 +88,12 @@ class takeWindow(object):
         self.menuF = tk.Frame(root, width=1200, height=420, bd=8, relief='raise')
         self.menuF.place(x=0,y=280)
         # =========================   Botões fundamentais   ===========================
-        self.run  =     tk.Button(self.menuF, text="    Run     ", font=('arial', 20, 'bold'), bg='green').place(x=1000, y=30)
-        self.checkout = tk.Button(self.menuF, text="Checkout", font=('arial', 20, 'bold'), bg='purple').place(x=1000, y=130)
-        self.save =     tk.Button(self.menuF, text="    Save    ", font=('arial', 20, 'bold'), bg='blue').place(x=1000, y=220)
-        self.exit =     tk.Button(self.menuF, text="     Exit     ", font=('arial', 20, 'bold'), bg='red', command=self.iExit).place(x=1000, y=320)
+        self.takeRun  = tk.Button(self.menuF, text="Take Run", font=('arial', 20, 'bold'), bg='green').place(x=1000, y=10)
+        self.takeCheck = tk.Button(self.menuF, text="Take Check", font=('arial', 20, 'bold'), bg='green').place(x=1000, y=60)
+        self.takeSave = tk.Button(self.menuF, text="Take Save", font=('arial', 20, 'bold'), bg='green').place(x=1000, y=110)
+        self.medStatus = tk.Button(self.menuF, text="Med Status", font=('arial', 20, 'bold'), bg='red').place(x=1000, y=160)
+        self.medSave = tk.Button(self.menuF, text="Med Save", font=('arial', 20, 'bold'), bg='red').place(x=1000, y=210)
+        self.medLoad = tk.Button(self.menuF, text="Med Load", font=('arial', 20, 'bold'), bg='red').place(x=1000, y=260)
         # ================   Checagem de níveis de entradas e saídas   ================        
         # Canais de entrada
         self.lblInCh = tk.Label(self.menuF, font=('arial', 17, 'bold'), text="Input Channels").place(x=55,y=30)
@@ -284,7 +286,7 @@ class takeWindow(object):
             if self.var12.get():
                 self.var12.set(False)
         
-#%% Instanciando janela
+ #%% Instanciando janela
 root = tk.Tk()
 root.geometry("1200x700+0+0")
 root.title("Measure Class")
