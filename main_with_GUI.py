@@ -155,12 +155,6 @@ class takeWindow(tk.Tk):
         #Botão de Limpar as variáveis de níveis
         self.clear =     tk.Button(self.menuF, text="     Clear     ", font=('arial', 17, 'bold'), bg='white', command=self.clearvars).place(x=175, y=300)
         
-        #Nova medição
-        self.var14=tk.BooleanVar()
-        self.newmeasurement = tk.Checkbutton(self.menuF, text=" New Measurment", font=('arial', 20, 'bold'), variable = self.var14, \
-                                onvalue=True, offvalue=False, command = self.AtivaCalibracao).place(x=550, y=30)
-#        if newmeasurement:
-#            newmeasurement_name = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varOutMin, state=tk.DISABLED).place(x=400,y=110)
 
     #========= Função que limpa as variáveis de níveis de entrada e saída =======
     def clearvars(self):
@@ -183,7 +177,7 @@ class takeWindow(tk.Tk):
     #=================== Condicionando string de receptores =====================
     
     def GetReceiver(self):
-        receiver = [self.in1Receiver.get(), self.in2Receiver.get(), self.in3Receiver(), self.in4Receiver()]
+        receiver = [self.receiver1.get(), self.receiver2.get(), self.receiver3.get(), self.receiver4.get()]
         return receiver
     #===================== Condicionando Fonte selecionada ======================
     def GetSource(self):
@@ -332,8 +326,8 @@ class takeWindow(tk.Tk):
                                     # Configuração fonte receptor
                                     # Obs. 1: manter itens da lista para canais Desativados
                                     receiver = self.GetReceiver(),
-                                    source = self.getSource(), # código de fonte a ser utilizado. Para fins de seleção dos canais de saída
-                                    excitation = self.getExcitation(), # escolhe sinal de excitacão  disponível no Setup de Medição
+                                    source = self.GetSource(), # código de fonte a ser utilizado. Para fins de seleção dos canais de saída
+                                    excitation = self.GetExcitation(), # escolhe sinal de excitacão  disponível no Setup de Medição
                                     tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050       
         elif self.Getkind() == 'noisefloor':
             measureTake = m.measureTake(SM,
@@ -356,6 +350,7 @@ class takeWindow(tk.Tk):
         
     def takeCheckBA(self):
         a=1
+        return a
         
     def takeSaveBA(self):
         measureTake.save(D)
@@ -394,7 +389,7 @@ SM = m.newMeasurement(name = 'Medição teste', # Nome da medição
 #                      Sintaxe : device = [<entrada>,<saida>] ou <entrada/saida>
 #                      Utilize pytta.list_devices() para listar os dispositivos do seu computador. 
 #                     device = [0,1], # PC laza Seleciona dispositivo listado em pytta.list_devices()
-                     device = 4, # Saffire Pro 40 laza Seleciona dispositivo listado em pytta.list_devices()
+                     device = [1,3], # Saffire Pro 40 laza Seleciona dispositivo listado em pytta.list_devices()
 #                     device = 0, # Firebox laza Seleciona dispositivo listado em pytta.list_devices()
 #                     device = [1,4], # PC laza Seleciona dispositivo listado em pytta.list_devices()
                      excitationSignals=excitationSignals, # Sinais de excitação
