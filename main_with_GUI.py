@@ -165,19 +165,39 @@ class takeWindow(object):
         self.varOutMax.set("0")
     
     #=================== Condicionando sinais de entrada ========================
-    def inChannels(self):
-        inputs=[self.var1.get(), self.var2.get(), self.var3.get(), self.var4.get()]
-        return inputs
+    def GetChannelStatus(self):
+        channelStatus = [self.var1.get(), self.var2.get(), self.var3.get(), self.var4.get()]
+        return channelStatus
+    
+    #===================== Condicionando Fonte selecionada ======================
+    def GetSource(self):
+        if self.var5.get():
+            source = 'S1'
+        if self.var6.get():
+            source = 'S2'
+        if self.var7.get():
+            source = 'S3'
+        return source
     
     #==================== Condicionando sinais de saída =========================
-    def outChannels(self):
-        outputs=[self.var5.get(), self.var6.get(), self.var7.get()]
-        return outputs
-    
-    #==================== Condicionando sinais de saída =========================
-    def SignalSelect(self):
-        signal=[self.var5.get(), self.var6.get(), self.var7.get()]
-        return signal
+    def GetExcitation(self):
+        if self.var8.get():
+            excitation = 'varredura'
+        if self.var9.get():
+            excitation = 'fala'
+        if self.var10.get():
+            excitation = 'musica'
+        return excitation
+
+    #==================== Condicionando sinais de saída =========================    
+    def GetKind(self):
+        if self.var11.get():
+            Kind = 'calibration'
+        if self.var12.get():
+            Kind = 'noisefloor'
+        if self.var13.get():
+            Kind = 'newpoint'
+        return Kind
     
     #========= Condicionando Checkbutton das Fontes =========
     def AtivaDodec1(self):
@@ -211,7 +231,8 @@ class takeWindow(object):
                     self.var5.set(False)
                 if self.var6.get():
                     self.var6.set(False)
-    
+
+    #========= Condicionando Checkbutton dos Sinais =========
     def AtivaSweep(self):
         if self.var11.get() or self.var12.get():
             self.var8.set(False)
@@ -224,7 +245,6 @@ class takeWindow(object):
                     self.var10.set(False)
     #                Room Response desativada
                 
-    #========= Condicionando Checkbutton dos Sinais =========
     def AtivaFala(self):
         if self.var11.get() or self.var12.get():
             self.var9.set(False)
