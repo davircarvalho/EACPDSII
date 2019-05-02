@@ -54,6 +54,10 @@ SM = m.newMeasurement(name = 'Medição teste', # Nome da medição
 
 #%% Cria instância de dados medidos
 D = m.Data(SM)
+# D.dummyFill() # Preenche instância de dados com dummy signals
+
+#%% Mostra status da instância de dados medidos
+D.getStatus()
 
 #%% Cria nova tomada de medição para uma nova configuração fonte receptor
 measureTake = m.measureTake(SM,
