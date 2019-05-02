@@ -25,19 +25,27 @@ class takeWindow(object):
         self.inF = tk.Frame(root, width=300, height=230, bd=8, relief='raise')
         self.inF.place(x=0,y=50)
         self.lblInput = tk.Label(self.inF, font=('arial', 15, 'italic'), bg='black', fg='white',
-                         text="Input channels", bd = 4, width=23).grid(row=0, column=0)
+                         text="Input channels", bd = 4, width=23).place(x=0, y=0)
         self.var1=tk.BooleanVar()
+        self.receiver1=tk.StringVar()
         self.in1 = tk.Checkbutton(self.inF, text="1 - Binaural E", variable=self.var1, onvalue=True, offvalue=False,
-                            font=('arial', 20, 'bold')). grid(row=1, sticky=tk.W)
+                            font=('arial', 20, 'bold')).place(x=0, y=35)
+        self.in1Receiver = tk.Entry(self.inF, font=('arial', 17, 'bold'), bd=1, width=3, textvariable=self.receiver1).place(x=230, y=40)
         self.var2=tk.BooleanVar()
+        self.receiver2=tk.StringVar()
         self.in2 = tk.Checkbutton(self.inF, text="2 - Binaural D", variable=self.var2,  onvalue=True, offvalue=False,
-                            font=('arial', 20, 'bold')). grid(row=2, sticky=tk.W)
+                            font=('arial', 20, 'bold')).place(x=0, y=80)
+        self.in2Receiver = tk.Entry(self.inF, font=('arial', 17, 'bold'), bd=1, width=3, textvariable=self.receiver2).place(x=230, y=90)
         self.var3=tk.BooleanVar()
+        self.receiver3=tk.StringVar()
         self.in3 = tk.Checkbutton(self.inF, text="3 - Mic. 1", variable=self.var3, onvalue=True, offvalue=False,
-                            font=('arial', 20, 'bold')). grid(row=3, sticky=tk.W)
+                            font=('arial', 20, 'bold')).place(x=0, y=125)
+        self.in3Receiver = tk.Entry(self.inF, font=('arial', 17, 'bold'), bd=1, width=3, textvariable=self.receiver3).place(x=230, y=135)
         self.var4=tk.BooleanVar()
+        self.receiver4=tk.StringVar()
         self.in4 = tk.Checkbutton(self.inF, text="4 - Mic. 2", variable=self.var4, onvalue=True, offvalue=False,
-                            font=('arial', 20, 'bold')). grid(row=4, sticky=tk.W)
+                            font=('arial', 20, 'bold')).place(x=0, y=170)
+        self.in4Receiver = tk.Entry(self.inF, font=('arial', 17, 'bold'), bd=1, width=3, textvariable=self.receiver4).place(x=230, y=180)
         
         #   Frame de seleção da fonte (Out frame- Outf)
         self.outF = tk.Frame(root, width=300, height=230, bd=8, relief='raise')
@@ -170,7 +178,12 @@ class takeWindow(object):
     def GetChannelStatus(self):
         channelStatus = [self.var1.get(), self.var2.get(), self.var3.get(), self.var4.get()]
         return channelStatus
+
+    #=================== Condicionando string de receptores =====================
     
+    def GetReceiver(self):
+        receiver = [self.in1Receiver.get(), self.in2Receiver.get(), self.in3Receiver(), self.in4Receiver()]
+        return receiver
     #===================== Condicionando Fonte selecionada ======================
     def GetSource(self):
         if self.var5.get():
