@@ -8,20 +8,25 @@ Created on Thu May  2 14:42:38 2019
 
 #%% Importando bibliotecas
 import tkinter as tk
+import measureClass as m
+import pytta
+from scipy import io
+import lju3ei1050
+import numpy as np
 
 #%% Classe da janela de tomadas da medição
-class takeWindow(object):
+class takeWindow(tk.Tk):
     
     def __init__(self,root):
         self.root = root
-        # Frames primarios        
+        #%% Frames primarios        
         #   Frame com nome style da medição (Name frame - Namef)
         self.nameF = tk.Frame(root, width=1200, height=50, bd=5, relief='raise')
         self.nameF.place(x=0, y=0)
         self.lblName = tk.Label(self.nameF, font=('arial', 25, 'italic'), bg='black', fg='green',
                         text="Keep Calm and Measure With Class", bd = 4, width=62).grid(row=0, column=0)
         
-        #   Frame de seleção dos canais de entrada (In frame- Inf)
+        #%%   Frame de seleção dos canais de entrada (In frame- Inf)
         self.inF = tk.Frame(root, width=300, height=230, bd=8, relief='raise')
         self.inF.place(x=0,y=50)
         self.lblInput = tk.Label(self.inF, font=('arial', 15, 'italic'), bg='black', fg='white',
@@ -39,7 +44,7 @@ class takeWindow(object):
         self.in4 = tk.Checkbutton(self.inF, text="4 - Mic. 2", variable=self.var4, onvalue=True, offvalue=False,
                             font=('arial', 20, 'bold')). grid(row=4, sticky=tk.W)
         
-        #   Frame de seleção da fonte (Out frame- Outf)
+        #%%   Frame de seleção da fonte (Out frame- Outf)
         self.outF = tk.Frame(root, width=300, height=230, bd=8, relief='raise')
         self.outF.place(x=300,y=50)
         self.lblOutput = tk.Label(self.outF, font=('arial', 15, 'italic'), bg='black', fg='white',
@@ -54,7 +59,7 @@ class takeWindow(object):
         self.out3 = tk.Checkbutton(self.outF, text="3 - P.A", variable=self.var7, onvalue=True, offvalue=False, \
                             font=('arial', 20, 'bold'), command = self.AtivaPA).grid(row=3, sticky=tk.W)
         
-        #   Frame de seleção do sinal de excitação (Signals frame - Sigsf)
+        #%%  Frame de seleção do sinal de excitação (Signals frame - Sigsf)
         self.sigsF = tk.Frame(root, width=300, height=230, bd=8, relief='raise')
         self.sigsF.place(x=600,y=50)
         self.lblOutput = tk.Label(self.sigsF, font=('arial', 15, 'italic'), bg='black', fg='white',
@@ -69,7 +74,7 @@ class takeWindow(object):
         self.signal3 = tk.Checkbutton(self.sigsF, text="Music", variable=self.var10,  onvalue=True, offvalue=False, \
                             font=('arial', 20, 'bold'), command=self.AtivaMusica). grid(row=2, sticky=tk.W)
         
-        #   Frame de seleção do tipo (template) de tomada da medição (Template frame - Tempf)
+        #%%   Frame de seleção do tipo (template) de tomada da medição (Template frame - Tempf)
         self.tempF = tk.Frame(root, width=300, height=230, bd=8, relief='raise')
         self.tempF.place(x=900,y=50)
         self.lblTemplate = tk.Label(self.tempF, font=('arial', 15, 'italic'), bg='black', fg='white',
@@ -84,16 +89,16 @@ class takeWindow(object):
         self.template3 = tk.Checkbutton(self.tempF, text="Room response", font=('arial', 20, 'bold'), variable = self.var13, \
                                 onvalue=True, offvalue=False, command = self.AtivaRoomResponse). grid(row=3, sticky=tk.W)
         
-        #   Frame de menu (Menu frame - Menuf)
+        #%%  Frame de menu (Menu frame - Menuf)
         self.menuF = tk.Frame(root, width=1200, height=420, bd=8, relief='raise')
         self.menuF.place(x=0,y=280)
         # =========================   Botões fundamentais   ===========================
-        self.takeRun  = tk.Button(self.menuF, text="Take Run", font=('arial', 20, 'bold'), bg='green').place(x=1000, y=10)
-        self.takeCheck = tk.Button(self.menuF, text="Take Check", font=('arial', 20, 'bold'), bg='green').place(x=1000, y=60)
-        self.takeSave = tk.Button(self.menuF, text="Take Save", font=('arial', 20, 'bold'), bg='green').place(x=1000, y=110)
-        self.medStatus = tk.Button(self.menuF, text="Med Status", font=('arial', 20, 'bold'), bg='red').place(x=1000, y=160)
-        self.medSave = tk.Button(self.menuF, text="Med Save", font=('arial', 20, 'bold'), bg='red').place(x=1000, y=210)
-        self.medLoad = tk.Button(self.menuF, text="Med Load", font=('arial', 20, 'bold'), bg='red').place(x=1000, y=260)
+        self.takeRun  = tk.Button(self.menuF, text="Take Run", font=('arial', 20, 'bold'), bg='green',command=self.takeRunBA).place(x=1000, y=10)
+        self.takeCheck = tk.Button(self.menuF, text="Take Check", font=('arial', 20, 'bold'), bg='green',command=self.takeCheckBA).place(x=1000, y=60)
+        self.takeSave = tk.Button(self.menuF, text="Take Save", font=('arial', 20, 'bold'), bg='green',command=self.takeSaveBA).place(x=1000, y=110)
+        self.medStatus = tk.Button(self.menuF, text="Med Status", font=('arial', 20, 'bold'), bg='red',command=self.medStatusBA).place(x=1000, y=160)
+        self.medSave = tk.Button(self.menuF, text="Med Save", font=('arial', 20, 'bold'), bg='red',command=self.medSaveBA).place(x=1000, y=210)
+        self.medLoad = tk.Button(self.menuF, text="Med Load", font=('arial', 20, 'bold'), bg='red',command=self.medLoadBA).place(x=1000, y=260)
         # ================   Checagem de níveis de entradas e saídas   ================        
         # Canais de entrada
         self.lblInCh = tk.Label(self.menuF, font=('arial', 17, 'bold'), text="Input Channels").place(x=55,y=30)
@@ -148,10 +153,6 @@ class takeWindow(object):
                                 onvalue=True, offvalue=False, command = self.AtivaCalibracao).place(x=550, y=30)
 #        if newmeasurement:
 #            newmeasurement_name = tk.Entry(Menuf, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=varOutMin, state=tk.DISABLED).place(x=400,y=110)
-
-    def iExit(self):
-        self.root.destroy()
-        return
 
     #========= Função que limpa as variáveis de níveis de entrada e saída =======
     def clearvars(self):
@@ -286,7 +287,90 @@ class takeWindow(object):
             if self.var12.get():
                 self.var12.set(False)
         
- #%% Instanciando janela
+#%% Funções dos botões - Button Action
+
+    def takeRunBA(self):
+        global measureTake
+        measureTake = m.measureTake(SM,
+                                kind = 'newpoint',
+                                # Status do canal: True para Ativado e False para Desativado
+                                channelStatus = [True, # canal 1
+                                                 True, # canal 2
+                                                 True, # canal 3
+                                                 True], # canal 4
+                                # Configuração fonte receptor
+                                # Obs. 1: manter itens da lista para canais Desativados
+                                receiver = ['R2', # canal 1 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
+                                            'R2', # canal 2 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
+                                            'R4', # canal 3 
+                                            'R5'], # canal 4
+                                source = 'S1', # código de fonte a ser utilizado. Para fins de seleção dos canais de saída
+                                excitation = 'varredura', # escolhe sinal de excitacão  disponível no Setup de Medição
+                                tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050       
+        measureTake.run()
+        
+    def takeCheckBA(self):
+        a=1
+        
+    def takeSaveBA(self):
+        measureTake.save(D)
+    
+    def medStatusBA(self):
+        D.getStatus()
+        
+    def medSaveBA(self):
+        m.save(SM,D,SM.name)
+        
+    def medLoadBA(self):
+        global SM, D
+        SM, D = m.load(input('Digite o nome da medição a ser carregada: '))
+
+#%% Main
+
+#%% Cria objeto para stream de dados com o LabJack U3 com o sensor de temperatura e umidade EI1050
+
+#tempHumid = lju3ei1050.main()
+tempHumid = None # Para testes com LabJack offline
+
+#%% Carrega sinais de excitação
+excitationSignals = {}
+excitationSignals['varredura'] = pytta.generate.sweep(freqMin=20, # Geração do sweep (também pode ser carregado projeto prévio)
+                            freqMax=20000,
+                            fftDegree=17,
+                            startMargin=1,
+                            stopMargin=1.5,
+                            method='logarithmic',
+                            windowing='hann')
+excitationSignals['musica'] = pytta.read_wav('Piano Over the rainbow Mic2 SHORT.wav') # Carregando sinal de música
+excitationSignals['fala'] = pytta.read_wav('Voice Sabine Short.WAV') # Carregando sinal de fala
+
+#%% Cria novo Setup de Medição
+SM = m.newMeasurement(name = 'Medição teste', # Nome da medição
+#                      Sintaxe : device = [<entrada>,<saida>] ou <entrada/saida>
+#                      Utilize pytta.list_devices() para listar os dispositivos do seu computador. 
+#                     device = [0,1], # PC laza Seleciona dispositivo listado em pytta.list_devices()
+                     device = 4, # Saffire Pro 40 laza Seleciona dispositivo listado em pytta.list_devices()
+#                     device = 0, # Firebox laza Seleciona dispositivo listado em pytta.list_devices()
+#                     device = [1,4], # PC laza Seleciona dispositivo listado em pytta.list_devices()
+                     excitationSignals=excitationSignals, # Sinais de excitação
+                     samplingRate = 44100, # [Hz]
+                     freqMin = 20, # [Hz]
+                     freqMax = 20000, # [Hz]
+                     inChannel = [1,2,3,4], # Canais de entrada
+                     inChName = ['Orelha E','Orelha D','Mic 1','Mic 2'], # Lista com o nome dos canais 
+                     outChannel = {'S1':([1],'Dodecaedro 1'),
+                                   'S2':([2],'Dodecaedro 2'),
+                                   'S3':([3,4],'Sistema da sala')}, # Dicionário com códigos e canais de saída associados
+                     averages = 3, # Número de médias por medição
+                     sourcesNumber = 3, # Número de fontes; dodecaedro e p.a. local
+                     receiversNumber = 5, # Número de receptores
+                     noiseFloorTp = 2, # [s] tempo de gravação do ruído de fundo
+                     calibrationTp = 2) # [s] tempo de gravação do sinal de calibração
+
+#%% Cria instância de dados medidos
+D = m.Data(SM)
+
+#%% Instanciando janela
 root = tk.Tk()
 root.geometry("1200x700+0+0")
 root.title("Measure Class")
