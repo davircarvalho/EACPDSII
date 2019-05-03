@@ -354,9 +354,18 @@ class takeWindow(tk.Tk):
         
     def takeSaveBA(self):
         measureTake.save(D)
-    
+        
     def medStatusBA(self):
-        D.getStatus()
+        windowStatus = tk.Tk()
+        scroll = tk.Scrollbar(windowStatus).pack(side=tk.RIGHT, fill=tk.Y)
+        listbox = tk.Listbox(windowStatus, yscrollcommand = scroll.set)
+        for k in range(1, 100):
+            tk.Label(windowStatus, text = str(k))
+        listbox.pack(side=tk.LEFT)
+        scroll.config(command=listbox.yview)
+        windowStatus.mainloop()
+#    def medStatusBA(self):
+#        D.getStatus()
         
     def medSaveBA(self):
         m.save(SM,D,SM.name)
