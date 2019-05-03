@@ -181,7 +181,7 @@ class Data():
 #                statusStr = statusStr+'\n'
 #            statusStr = statusStr+'______________________________\n'
                 
-        return print(statusStr)
+        return statusStr
 #%% Classe das tomadas de medição
 class measureTake():
     
