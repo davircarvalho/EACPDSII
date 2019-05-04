@@ -181,7 +181,7 @@ class Data():
 #                statusStr = statusStr+'\n'
 #            statusStr = statusStr+'______________________________\n'
                 
-        return statusStr
+        return print(statusStr)
 #%% Classe das tomadas de medição
 class measureTake():
     
@@ -218,16 +218,18 @@ class measureTake():
         if self.kind == 'noisefloor':
             self.measurementObject = cp.deepcopy(MS.measurementObjects[kind])
             self.averages = MS.averages
-        j = 1
+        j = 0
         inChannel = []
+        channelName = []
         for i in self.channelStatus:
             if i:
-                inChannel.append(j)
+                inChannel.append(self.MS.inChannel[j])
+                channelName.append(self.MS.inChName[j])
             j=j+1
         if kind == 'newpoint':
             self.measurementObject.outChannel = self.MS.outChannel[self.source][0]
         self.measurementObject.inChannel = inChannel # Ao redefinir a propriedade inChannelo o PyTTa já reajusta a lista channelName com os nomes antigos + nomes padrão para novos canais
-        self.measurementObject.channelName = [MS.inChName[i-1] for i in inChannel] # Atribuiu os nomes corretos aos canais selecionados
+        self.measurementObject.channelName = channelName # Atribuiu os nomes corretos aos canais selecionados
 
     def run(self):
         self.measuredTake = []
@@ -346,15 +348,49 @@ class measureTake():
     
 def save(MS,D,filename):
     timeStamp = time.ctime(time.time())
-    saveDict = {'MS':MS,'Data':D,'Timestamp':timeStamp}
+    msD = {'averages':MS.averages,
+           'calibrationTp':MS.calibrationTp,
+           'device':MS.device,
+           'excitationSignals':MS.excitationSignals,
+           'freqMax':MS.freqMax,
+           'freqMin':MS.freqMin,
+           'inChName':MS.inChName,
+           'inChannel':MS.inChannel,
+           'measurementObjects':MS.measurementObjects,
+           'name':MS.name,
+           'noiseFloorTp':MS.noiseFloorTp,
+           'outChannel':MS.outChannel,
+           'receiversNumber':MS.receiversNumber,
+           'samplingRate':MS.samplingRate,
+           'sourcesNumber':MS.sourcesNumber}
+    dD = {'measuredData':D.measuredData,
+          'status':D.status}
+    saveDict = {'MS':msD,'Data':dD,'Timestamp':timeStamp}
     # write python dict to a file
     output = open(filename+'.pkl', 'wb')
     pickle.dump(saveDict,output)
     output.close()
     
-def load(filename):
+def load(MS,D,filename):
     #%% read python dict back from the file
     pkl_file = open(filename+'.pkl', 'rb')
     loadDict = pickle.load(pkl_file)
-    pkl_file.close()
-    return loadDict['MS'],loadDict['Data']
+    pkl_file.close()            
+    
+    MS.averages = loadDict['MS']['averages']
+    MS.calibrationTp = loadDict['MS']['calibrationTp']
+    MS.device = loadDict['MS']['device']
+    MS.excitationSignals = loadDict['MS']['excitationSignals']
+    MS.freqMax = loadDict['MS']['freqMax']
+    MS.freqMin = loadDict['MS']['freqMin']
+    MS.inChName = loadDict['MS']['inChName']
+    MS.inChannel = loadDict['MS']['inChannel']
+    MS.measurementObjects = loadDict['MS']['measurementObjects']
+    MS.name = loadDict['MS']['name']
+    MS.noiseFloorTp = loadDict['MS']['noiseFloorTp']
+    MS.outChannel = loadDict['MS']['outChannel']
+    MS.receiversNumber = loadDict['MS']['receiversNumber']
+    MS.samplingRate = loadDict['MS']['samplingRate']
+    MS.sourcesNumber = loadDict['MS']['sourcesNumber']
+    D.measuredData = loadDict['Data']['measuredData']
+    D.status = loadDict['Data']['status']
