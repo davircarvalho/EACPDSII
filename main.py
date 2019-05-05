@@ -14,8 +14,8 @@ import numpy as np
 
 #%% Cria objeto para stream de dados com o LabJack U3 com o sensor de temperatura e umidade EI1050
 
-tempHumid = lju3ei1050.main()
-#tempHumid = None # Para testes com LabJack offline
+#tempHumid = lju3ei1050.main()
+tempHumid = None # Para testes com LabJack offline
 
 #%% Carrega sinais de excitação
 excitationSignals = {}
@@ -66,18 +66,20 @@ measureTake = m.measureTake(SM,
                             # Status do canal: True para Ativado e False para Desativado
                             channelStatus = [True, # canal 1
                                              True, # canal 2
-                                             False, # canal 3
+                                             True, # canal 3
                                              True], # canal 4
                             # Configuração fonte receptor
                             # Obs. 1: manter itens da lista para canais Desativados
                             receiver = ['R1', # canal 1 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
                                         'R1', # canal 2 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
-                                        'R3', # canal 3 
+                                        'R2', # canal 3 
                                         'R3'], # canal 4
-                            source = 'S3', # código de fonte a ser utilizado. Para fins de seleção dos canais de saída
-#                            excitation = 'varredura', # escolhe sinal de excitacão  disponível no Setup de Medição
-#                            excitation = 'fala', # escolhe sinal de excitacão  disponível no Setup de Medição
-                            excitation = 'musica', # escolhe sinal de excitacão  disponível no Setup de Medição
+                            source = 'S1', # código de fonte a ser utilizado. Para fins de seleção dos canais de saída
+#                            source = 'S2',
+#                            source = 'S3',
+                            excitation = 'varredura', # escolhe sinal de excitacão  disponível no Setup de Medição
+#                            excitation = 'fala',
+#                            excitation = 'musica',
                             tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
 #%% Cria nova tomada de medição do ruído de fundo
 measureTake = m.measureTake(SM,
@@ -100,9 +102,9 @@ measureTake = m.measureTake(SM,
                             kind = 'calibration',
                             # Status do canal: True para Ativado e False para Desativado
                             # Obs. 1: para kind = 'calibration' os canais devem ser calibrados individualmente
-                            channelStatus = [False, # canal 1
+                            channelStatus = [True, # canal 1
                                              False, # canal 2
-                                             True, # canal 3
+                                             False, # canal 3
                                              False], # canal 4
                             tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
 #%% Nova tomada de medição
@@ -115,4 +117,4 @@ measureTake.save(D)
 m.save(SM,D,'med_hardware-test-lab')
 
 #%% Carrega dados medidos e setup de medição do arquivo
-m.load(SM,D,'med_hardware-test-lab')
+SM, D = m.load('med_hardware-test-lab')
