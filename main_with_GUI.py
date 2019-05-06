@@ -355,17 +355,16 @@ class takeWindow(tk.Tk):
     def takeSaveBA(self):
         measureTake.save(D)
         
-    def medStatusBA(self):
-        windowStatus = tk.Tk()
-        scroll = tk.Scrollbar(windowStatus).pack(side=tk.RIGHT, fill=tk.Y)
-        listbox = tk.Listbox(windowStatus, yscrollcommand = scroll.set)
-        for k in range(1, 100):
-            tk.Label(windowStatus, text = str(k))
-        listbox.pack(side=tk.LEFT)
-        scroll.config(command=listbox.yview)
-        windowStatus.mainloop()
 #    def medStatusBA(self):
-#        D.getStatus()
+#        windowStatus = tk.Tk()
+#        scroll = tk.Scrollbar(windowStatus).pack(side=tk.RIGHT, fill=tk.Y)
+#        listbox = tk.Listbox(windowStatus)
+#        label = tk.Label(windowStatus, text=D.getStatus()).pack(side=tk.RIGHT)
+#        listbox.pack(side=tk.LEFT)
+##        scroll.config(command=listbox.yview)
+#        windowStatus.mainloop()
+    def medStatusBA(self):
+        print(D.getStatus())
         
     def medSaveBA(self):
         m.save(SM,D,SM.name)
@@ -398,7 +397,7 @@ SM = m.newMeasurement(name = 'Medição teste', # Nome da medição
 #                      Sintaxe : device = [<entrada>,<saida>] ou <entrada/saida>
 #                      Utilize pytta.list_devices() para listar os dispositivos do seu computador. 
 #                     device = [0,1], # PC laza Seleciona dispositivo listado em pytta.list_devices()
-                     device = 4, # Saffire Pro 40 laza Seleciona dispositivo listado em pytta.list_devices()
+                     device = [1,3], # Saffire Pro 40 laza Seleciona dispositivo listado em pytta.list_devices()
 #                     device = [1,3], # PC Leo Seleciona dispositivo listado em pytta.list_devices()
 #                     device = 0, # Firebox laza Seleciona dispositivo listado em pytta.list_devices()
 #                     device = [1,4], # PC laza Seleciona dispositivo listado em pytta.list_devices()
