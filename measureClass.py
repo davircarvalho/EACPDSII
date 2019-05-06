@@ -97,6 +97,67 @@ class newMeasurement():
                                                          inChannel=self.inChannel,
                                                          comment='calibration')}
 
+#    def exportDict(self):
+#       expdic = vars(self)
+#       for key, value in expdic.items():
+#           if isinstance(value,pytta.classes.SignalObj):
+#               expdic[key] = vars(value)
+#           elif isinstance(value,dict):
+#               newdict = {}
+#               for key2, value2 in value.items():
+#                   if isinstance(value2,pytta.classes.SignalObj):
+#                       newdict[key2] = vars(value2)
+#                   else:
+#                       newdict[key2] = value2
+#               expdic[key] = newdict
+#       return expdic
+                   
+    def exportDict(self):
+       expdic = vars(self)
+       
+       def toDict(thing):
+           if isinstance(thing,pytta.classes.SignalObj):
+               mySigObj = vars(thing)
+               for key, value in mySigObj.items():
+                   if value is None:
+                       mySigObj[key] = 0
+                   if isinstance(mySigObj[key],dict) and len(value) == 0:
+                       mySigObj[key] = 0
+               mySigObjno_ = {}
+               for key, value in mySigObj.items():
+                   if key.find('_') >= 0:
+                       key = key.replace('_','')
+                   mySigObjno_[key] = value
+                   
+               return mySigObjno_
+           
+           elif isinstance(thing,dict):
+               dictime = {}
+               for key, value in thing.items():
+                   if key.find(' ') >= 0:
+                       key = key.replace(' ','')
+                   dictime[key] = toDict(value)
+               return dictime
+           
+           elif isinstance(thing,list):
+               dictime = {}
+               j = 0
+               for item in thing:
+                   dictime['T'+str(j)] = toDict(item)
+                   j=j+1
+               return dictime
+           
+           elif thing is None:
+               return 0
+           
+           elif isinstance(thing,newMeasurement):
+               return 0
+           
+           else:
+               return thing
+           
+       return toDict(expdic)
+
 #%% Classe do dicionário de dados medidos
         
 class Data():
@@ -181,7 +242,54 @@ class Data():
 #                statusStr = statusStr+'\n'
 #            statusStr = statusStr+'______________________________\n'
                 
-        return statusStr
+        return print(statusStr)
+    
+    def exportDict(self):
+       expdic = vars(self)
+       
+       def toDict(thing):
+           if isinstance(thing,pytta.classes.SignalObj):
+               mySigObj = vars(thing)
+               for key, value in mySigObj.items():
+                   if value is None:
+                       mySigObj[key] = 0
+                   if isinstance(mySigObj[key],dict) and len(value) == 0:
+                       mySigObj[key] = 0
+               mySigObjno_ = {}
+               for key, value in mySigObj.items():
+                   if key.find('_') >= 0:
+                       key = key.replace('_','')
+                   mySigObjno_[key] = value
+                   
+               return mySigObjno_
+           
+           elif isinstance(thing,dict):
+               dictime = {}
+               for key, value in thing.items():
+                   if key.find(' ') >= 0:
+                       key = key.replace(' ','')
+                   dictime[key] = toDict(value)
+               return dictime
+           
+           elif isinstance(thing,list):
+               dictime = {}
+               j = 0
+               for item in thing:
+                   dictime['T'+str(j)] = toDict(item)
+                   j=j+1
+               return dictime
+           
+           elif thing is None:
+               return 0
+           
+           elif isinstance(thing,newMeasurement):
+               return 0
+           
+           else:
+               return thing
+           
+       return toDict(expdic)
+   
 #%% Classe das tomadas de medição
 class measureTake():
     
@@ -218,16 +326,18 @@ class measureTake():
         if self.kind == 'noisefloor':
             self.measurementObject = cp.deepcopy(MS.measurementObjects[kind])
             self.averages = MS.averages
-        j = 1
+        j = 0
         inChannel = []
+        channelName = []
         for i in self.channelStatus:
             if i:
-                inChannel.append(j)
+                inChannel.append(self.MS.inChannel[j])
+                channelName.append(self.MS.inChName[j])
             j=j+1
         if kind == 'newpoint':
             self.measurementObject.outChannel = self.MS.outChannel[self.source][0]
         self.measurementObject.inChannel = inChannel # Ao redefinir a propriedade inChannelo o PyTTa já reajusta a lista channelName com os nomes antigos + nomes padrão para novos canais
-        self.measurementObject.channelName = [MS.inChName[i-1] for i in inChannel] # Atribuiu os nomes corretos aos canais selecionados
+        self.measurementObject.channelName = channelName # Atribuiu os nomes corretos aos canais selecionados
 
     def run(self):
         self.measuredTake = []
@@ -346,7 +456,24 @@ class measureTake():
     
 def save(MS,D,filename):
     timeStamp = time.ctime(time.time())
-    saveDict = {'MS':MS,'Data':D,'Timestamp':timeStamp}
+    msD = {'averages':MS.averages,
+           'calibrationTp':MS.calibrationTp,
+           'device':MS.device,
+           'excitationSignals':MS.excitationSignals,
+           'freqMax':MS.freqMax,
+           'freqMin':MS.freqMin,
+           'inChName':MS.inChName,
+           'inChannel':MS.inChannel,
+           'measurementObjects':MS.measurementObjects,
+           'name':MS.name,
+           'noiseFloorTp':MS.noiseFloorTp,
+           'outChannel':MS.outChannel,
+           'receiversNumber':MS.receiversNumber,
+           'samplingRate':MS.samplingRate,
+           'sourcesNumber':MS.sourcesNumber}
+    dD = {'measuredData':D.measuredData,
+          'status':D.status}
+    saveDict = {'MS':msD,'Data':dD,'Timestamp':timeStamp}
     # write python dict to a file
     output = open(filename+'.pkl', 'wb')
     pickle.dump(saveDict,output)
@@ -356,5 +483,23 @@ def load(filename):
     #%% read python dict back from the file
     pkl_file = open(filename+'.pkl', 'rb')
     loadDict = pickle.load(pkl_file)
-    pkl_file.close()
-    return loadDict['MS'],loadDict['Data']
+    pkl_file.close()            
+    MS = newMeasurement(averages = loadDict['MS']['averages'],
+                        calibrationTp = loadDict['MS']['calibrationTp'],
+                        device = loadDict['MS']['device'],
+                        excitationSignals = loadDict['MS']['excitationSignals'],
+                        freqMax = loadDict['MS']['freqMax'],
+                        freqMin = loadDict['MS']['freqMin'],
+                        inChName = loadDict['MS']['inChName'],
+                        inChannel = loadDict['MS']['inChannel'],
+                        name = loadDict['MS']['name'],
+                        noiseFloorTp = loadDict['MS']['noiseFloorTp'],
+                        outChannel = loadDict['MS']['outChannel'],
+                        receiversNumber = loadDict['MS']['receiversNumber'],
+                        samplingRate = loadDict['MS']['samplingRate'],
+                        sourcesNumber = loadDict['MS']['sourcesNumber'])    
+    MS.measurementObjects = loadDict['MS']['measurementObjects']
+    D = Data(MS)
+    D.measuredData = loadDict['Data']['measuredData']
+    D.status = loadDict['Data']['status']
+    return MS, D
