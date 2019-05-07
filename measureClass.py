@@ -210,6 +210,14 @@ class Data(object):
         cAll = '\x1b[0;30;46m'
         cTrue = '\x1b[3;30;42m'
         cFalse = '\x1b[3;30;41m'
+        
+#        cEnd = ''
+#        cHeader = ''
+#        cHeader2 = ''
+#        cAll = ''
+#        cTrue = ''
+#        cFalse = ''
+        
         for key in self.status:
             statusStr = statusStr+cHeader+'            '+key+'            '+cEnd+'\n'
             if key == 'noisefloor':
@@ -242,7 +250,8 @@ class Data(object):
 #                statusStr = statusStr+'\n'
 #            statusStr = statusStr+'______________________________\n'
                 
-        return print(statusStr)
+#        return print(statusStr)
+        return statusStr
     
     def exportDict(self):
        expdic = vars(self)

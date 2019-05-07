@@ -101,12 +101,12 @@ class takeWindow(tk.Tk):
         self.menuF = tk.Frame(root, width=1200, height=420, bd=8, relief='raise')
         self.menuF.place(x=0,y=280)
         # =========================   Botões fundamentais   ===========================
-        self.takeRun  = tk.Button(self.menuF, text="Take Run", font=('arial', 20, 'bold'), bg='green',command=self.takeRunBA).place(x=1000, y=10)
-        self.takeCheck = tk.Button(self.menuF, text="Take Check", font=('arial', 20, 'bold'), bg='green',command=self.takeCheckBA).place(x=1000, y=60)
-        self.takeSave = tk.Button(self.menuF, text="Take Save", font=('arial', 20, 'bold'), bg='green',command=self.takeSaveBA).place(x=1000, y=110)
-        self.medStatus = tk.Button(self.menuF, text="Med Status", font=('arial', 20, 'bold'), bg='red',command=self.medStatusBA).place(x=1000, y=160)
-        self.medSave = tk.Button(self.menuF, text="Med Save", font=('arial', 20, 'bold'), bg='red',command=self.medSaveBA).place(x=1000, y=210)
-        self.medLoad = tk.Button(self.menuF, text="Med Load", font=('arial', 20, 'bold'), bg='red',command=self.medLoadBA).place(x=1000, y=260)
+        self.takeRun   = tk.Button(self.menuF, text="  Take Run   ", font=('arial', 20, 'bold'), bg='green',command=self.takeRunBA).place(x=1000, y=10)
+        self.takeCheck = tk.Button(self.menuF, text=" Take Check ", font=('arial', 20, 'bold'), bg='green',command=self.takeCheckBA).place(x=1000, y=70)
+        self.takeSave  = tk.Button(self.menuF, text="  Take Save  ", font=('arial', 20, 'bold'), bg='green',command=self.takeSaveBA).place(x=1000, y=130)
+        self.medStatus = tk.Button(self.menuF, text="  Med Status  ", font=('arial', 20, 'bold'), bg='red',command=self.medStatusBA).place(x=1000, y=190)
+        self.medSave   = tk.Button(self.menuF, text="   Med Save   ", font=('arial', 20, 'bold'), bg='red',command=self.medSaveBA).place(x=1000, y=250)
+        self.medLoad   = tk.Button(self.menuF, text="    Med Load  ", font=('arial', 20, 'bold'), bg='red',command=self.medLoadBA).place(x=1000, y=310)
         # ================   Checagem de níveis de entradas e saídas   ================        
         # Canais de entrada
         self.lblInCh = tk.Label(self.menuF, font=('arial', 17, 'bold'), text="Input Channels").place(x=55,y=30)
@@ -116,41 +116,41 @@ class takeWindow(tk.Tk):
         self.lblInCh_2 = tk.Label(self.menuF, font=('arial', 17, 'bold'), text="2").place(x=10,y=150)
         self.lblInCh_3 = tk.Label(self.menuF, font=('arial', 17, 'bold'), text="3").place(x=10,y=190)
         self.lblInCh_4 = tk.Label(self.menuF, font=('arial', 17, 'bold'), text="4").place(x=10,y=230)
-        self.varInMin_1 = tk.StringVar()
-        self.varInMin_1.set("0")
-        self.InMin_1 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMin_1, state=tk.DISABLED).place(x=50,y=110)
-        self.varInMax_1 = tk.StringVar()
-        self.varInMax_1.set("0")
-        self.InMax_1 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_1, state=tk.DISABLED).place(x=150,y=110)
-        self.varInMin_2 = tk.StringVar()
-        self.varInMin_2.set("0")
-        self.InMin_2 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMin_2, state=tk.DISABLED).place(x=50,y=150)
-        self.varInMax_2 = tk.StringVar()
-        self.varInMax_2.set("0")
-        self.InMax_2 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_2, state=tk.DISABLED).place(x=150,y=150)
-        self.varInMin_3 = tk.StringVar()
-        self.varInMin_3.set("0")
-        self.InMin_3 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMin_3, state=tk.DISABLED).place(x=50,y=190)
-        self.varInMax_3 = tk.StringVar()
-        self.varInMax_3.set("0")
-        self.InMax_3 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_3, state=tk.DISABLED).place(x=150,y=190)
-        self.varInMin_4 = tk.StringVar()
-        self.varInMin_4.set("0")
-        self.InMin_4 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMin_4, state=tk.DISABLED).place(x=50,y=230)
-        self.varInMax_4 = tk.StringVar()
-        self.varInMax_4.set("0")
-        self.InMax_4 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_4, state=tk.DISABLED).place(x=150,y=230)
+        self.varInMin_1 = tk.IntVar()
+        self.varInMin_1.set(0)
+        self.InMin_1 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMin_1).place(x=50,y=110)
+        self.varInMax_1 = tk.IntVar()
+        self.varInMax_1.set(0)
+        self.InMax_1 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_1).place(x=150,y=110)
+        self.varInMin_2 = tk.IntVar()
+        self.varInMin_2.set(0)
+        self.InMin_2 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMin_2).place(x=50,y=150)
+        self.varInMax_2 = tk.IntVar()
+        self.varInMax_2.set(0)
+        self.InMax_2 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_2).place(x=150,y=150)
+        self.varInMin_3 = tk.IntVar()
+        self.varInMin_3.set(0)
+        self.InMin_3 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMin_3).place(x=50,y=190)
+        self.varInMax_3 = tk.IntVar()
+        self.varInMax_3.set(0)
+        self.InMax_3 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_3).place(x=150,y=190)
+        self.varInMin_4 = tk.IntVar()
+        self.varInMin_4.set(0)
+        self.InMin_4 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMin_4).place(x=50,y=230)
+        self.varInMax_4 = tk.IntVar()
+        self.varInMax_4.set(0)
+        self.InMax_4 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_4).place(x=150,y=230)
         
         #Canais de saída
         self.lblOutCh= tk.Label(self.menuF, font=('arial', 17, 'bold'), text="Output Channels").place(x=290,y=30)
         self.lblOutCh_min = tk.Label(self.menuF, font=('arial', 14, 'italic'), text="Min. (dB)").place(x=295,y=70)
         self.lblOutCh_max = tk.Label(self.menuF, font=('arial', 14, 'italic'), text="Max. (dB)").place(x=395,y=70)
-        self.varOutMin = tk.StringVar()
-        self.OutMin_1 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varOutMin, state=tk.DISABLED).place(x=300,y=110)
-        self.varOutMin.set("0")
-        self.varOutMax = tk.StringVar()
-        self.varOutMax.set("0")
-        self.OutMax_1 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varOutMin, state=tk.DISABLED).place(x=400,y=110)
+        self.varOutMin = tk.IntVar()
+        self.OutMin_1 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varOutMin).place(x=300,y=110)
+        self.varOutMin.set(0)
+        self.varOutMax = tk.IntVar()
+        self.varOutMax.set(0)
+        self.OutMax_1 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varOutMin).place(x=400,y=110)
         
         #Botão de Limpar as variáveis de níveis
         self.clear =     tk.Button(self.menuF, text="     Clear     ", font=('arial', 17, 'bold'), bg='white', command=self.clearvars).place(x=175, y=300)
@@ -158,16 +158,16 @@ class takeWindow(tk.Tk):
 
     #========= Função que limpa as variáveis de níveis de entrada e saída =======
     def clearvars(self):
-        self.varInMin_1.set("0")
-        self.varInMax_1.set("0")
-        self.varInMin_2.set("0")
-        self.varInMax_2.set("0")
-        self.varInMin_3.set("0")
-        self.varInMax_3.set("0")
-        self.varInMin_4.set("0")
-        self.varInMax_4.set("0")
-        self.varOutMin.set("0")
-        self.varOutMax.set("0")
+        self.varInMin_1.set(0)
+        self.varInMax_1.set(0)
+        self.varInMin_2.set(0)
+        self.varInMax_2.set(0)
+        self.varInMin_3.set(0)
+        self.varInMax_3.set(0)
+        self.varInMin_4.set(0)
+        self.varInMax_4.set(0)
+        self.varOutMin.set(0)
+        self.varOutMax.set(0)
     
     #=================== Condicionando sinais de entrada ========================
     def GetChannelStatus(self):
@@ -348,6 +348,20 @@ class takeWindow(tk.Tk):
                                         tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
         measureTake.run()
         
+#        # Níveis dos canais de entrada
+#        # pytta.SignalObj.min_level(self)[0] ou pytta.SignalObj.max_level(self)[0]
+#        self.varInMin_1.set(AlgumaCoisa.min_level(self)[0])
+#        self.varInMax_1.set(AlgumaCoisa.max_level(self)[0])
+#        self.varInMin_2.set(AlgumaCoisa.min_level(self)[1])
+#        self.varInMax_2.set(AlgumaCoisa.max_level(self)[1])
+#        self.varInMin_3.set(AlgumaCoisa.min_level(self)[2])
+#        self.varInMax_3.set(AlgumaCoisa.max_level(self)[2])
+#        self.varInMin_4.set(AlgumaCoisa.min_level(self)[3])
+#        self.varInMax_4.set(AlgumaCoisa.max_level(self)[3])
+#        # Níevis dos canais de saída
+#        self.varOutMin.set(0)
+#        self.varOutMax.set(0)
+        
     def takeCheckBA(self):
         a=1
         return a
@@ -355,17 +369,26 @@ class takeWindow(tk.Tk):
     def takeSaveBA(self):
         measureTake.save(D)
         
-    def medStatusBA(self):
-        windowStatus = tk.Tk()
-        scroll = tk.Scrollbar(windowStatus).pack(side=tk.RIGHT, fill=tk.Y)
-        listbox = tk.Listbox(windowStatus, yscrollcommand = scroll.set)
-        for k in range(1, 100):
-            tk.Label(windowStatus, text = str(k))
-        listbox.pack(side=tk.LEFT)
-        scroll.config(command=listbox.yview)
-        windowStatus.mainloop()
+                
 #    def medStatusBA(self):
-#        D.getStatus()
+#        windowStatus = tk.Tk()
+#        scrollbar = tk.Scrollbar(windowStatus)
+#        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)        
+#        listbox = tk.Listbox(windowStatus)
+#        listbox.pack(fill=tk.BOTH)        
+#        tk.Label(windowStatus, text=D.getStatus()).pack(fill=tk.X)
+##        for i in range(0, len(D.getStatus())):
+##            if D.getStatus()[i] == '\n':
+##                listbox.insert(tk.END, '\n')
+##            else:
+##        listbox.insert(tk.END, D.getStatus())           
+#        listbox.config(yscrollcommand=scrollbar.set)
+#        scrollbar.config(command=listbox.yview)
+#        windowStatus.mainloop()
+        
+    def medStatusBA(self):
+        print(D.getStatus())
+        
         
     def medSaveBA(self):
         m.save(SM,D,SM.name)
@@ -373,6 +396,10 @@ class takeWindow(tk.Tk):
     def medLoadBA(self):
         global SM, D
         SM, D = m.load(input('Digite o nome da medição a ser carregada: '))
+        
+        
+    def chLevels(self):
+        print(pytta.SignalObj.max_level())
 
 #%% Main
 
@@ -390,16 +417,16 @@ excitationSignals['varredura'] = pytta.generate.sweep(freqMin=20, # Geração do
                             stopMargin=1.5,
                             method='logarithmic',
                             windowing='hann')
-excitationSignals['musica'] = pytta.read_wav('Piano Over the rainbow Mic2 SHORT.wav') # Carregando sinal de música
-excitationSignals['fala'] = pytta.read_wav('Voice Sabine Short.WAV') # Carregando sinal de fala
+excitationSignals['musica'] = pytta.read_wav('Piano Over the rainbow Mic2 SHORT_edited.wav') # Carregando sinal de música
+excitationSignals['fala'] = pytta.read_wav('Voice Sabine Short_edited.WAV') # Carregando sinal de fala
 
 #%% Cria novo Setup de Medição
 SM = m.newMeasurement(name = 'Medição teste', # Nome da medição
 #                      Sintaxe : device = [<entrada>,<saida>] ou <entrada/saida>
 #                      Utilize pytta.list_devices() para listar os dispositivos do seu computador. 
 #                     device = [0,1], # PC laza Seleciona dispositivo listado em pytta.list_devices()
-                     device = 4, # Saffire Pro 40 laza Seleciona dispositivo listado em pytta.list_devices()
-#                     device = [1,3], # PC Leo Seleciona dispositivo listado em pytta.list_devices()
+#                     device = 4, # Saffire Pro 40 laza Seleciona dispositivo listado em pytta.list_devices()
+                     device = [1,3], # PC Leo Seleciona dispositivo listado em pytta.list_devices()
 #                     device = 0, # Firebox laza Seleciona dispositivo listado em pytta.list_devices()
 #                     device = [1,4], # PC laza Seleciona dispositivo listado em pytta.list_devices()
                      excitationSignals=excitationSignals, # Sinais de excitação
@@ -429,3 +456,5 @@ root.configure(background = 'black')
 takeWindow(root)
 #%% Abrindo janela
 root.mainloop()
+
+
