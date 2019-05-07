@@ -160,7 +160,7 @@ class newMeasurement():
 
 #%% Classe do dicionário de dados medidos
         
-class Data():
+class Data(object):
     
     def __init__(self,MS):
         self.MS = MS
