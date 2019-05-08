@@ -421,12 +421,12 @@ excitationSignals['musica'] = pytta.read_wav('Piano Over the rainbow Mic2 SHORT_
 excitationSignals['fala'] = pytta.read_wav('Voice Sabine Short_edited.WAV') # Carregando sinal de fala
 
 #%% Cria novo Setup de Medição
-SM = m.newMeasurement(name = 'Medição teste', # Nome da medição
+SM = m.newMeasurement(name = 'med-pytta03', # Nome da medição
 #                      Sintaxe : device = [<entrada>,<saida>] ou <entrada/saida>
 #                      Utilize pytta.list_devices() para listar os dispositivos do seu computador. 
 #                     device = [0,1], # PC laza Seleciona dispositivo listado em pytta.list_devices()
-#                     device = 4, # Saffire Pro 40 laza Seleciona dispositivo listado em pytta.list_devices()
-                     device = [1,3], # PC Leo Seleciona dispositivo listado em pytta.list_devices()
+                     device = 4, # Saffire Pro 40 laza Seleciona dispositivo listado em pytta.list_devices()
+#                     device = [1,3], # PC Leo Seleciona dispositivo listado em pytta.list_devices()
 #                     device = 0, # Firebox laza Seleciona dispositivo listado em pytta.list_devices()
 #                     device = [1,4], # PC laza Seleciona dispositivo listado em pytta.list_devices()
                      excitationSignals=excitationSignals, # Sinais de excitação

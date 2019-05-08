@@ -10,17 +10,21 @@ import measureClass as m
 from scipy import io
 import numpy as np
 import pytta
+import copy as cp
 
 #%%
-medName = 'med_hardware-test-lab'
+medName = 'med-pytta03'
 
 #%%
 SM, D = m.load(medName)
 
 #%%
-calibSig = D.measuredData['calibration']['Mic 1'][0][0]
-calibSig.calib_pressure(calibSig,1,1000)
+calibSig = cp.deepcopy(D.measuredData['calibration']['Orelha E'][0][0])
 calibSig.plot_freq()
+#%%
+calibdSig = cp.deepcopy(calibSig)
+calibdSig.calib_pressure(0,calibSig,1,1000)
+calibdSig.plot_freq()
 
 #%% 
 Ddict = D.exportDict()

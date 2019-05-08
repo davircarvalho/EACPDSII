@@ -9,6 +9,7 @@ Created on Wed Apr 16 21:48:23 2019
 #%% Importando bibliotecas
 
 import pytta
+from pytta.classes import _to_dict
 import numpy as np
 import copy as cp
 import time
@@ -113,50 +114,8 @@ class newMeasurement():
 #       return expdic
                    
     def exportDict(self):
-       expdic = vars(self)
-       
-       def toDict(thing):
-           if isinstance(thing,pytta.classes.SignalObj):
-               mySigObj = vars(thing)
-               for key, value in mySigObj.items():
-                   if value is None:
-                       mySigObj[key] = 0
-                   if isinstance(mySigObj[key],dict) and len(value) == 0:
-                       mySigObj[key] = 0
-               mySigObjno_ = {}
-               for key, value in mySigObj.items():
-                   if key.find('_') >= 0:
-                       key = key.replace('_','')
-                   mySigObjno_[key] = value
-                   
-               return mySigObjno_
-           
-           elif isinstance(thing,dict):
-               dictime = {}
-               for key, value in thing.items():
-                   if key.find(' ') >= 0:
-                       key = key.replace(' ','')
-                   dictime[key] = toDict(value)
-               return dictime
-           
-           elif isinstance(thing,list):
-               dictime = {}
-               j = 0
-               for item in thing:
-                   dictime['T'+str(j)] = toDict(item)
-                   j=j+1
-               return dictime
-           
-           elif thing is None:
-               return 0
-           
-           elif isinstance(thing,newMeasurement):
-               return 0
-           
-           else:
-               return thing
-           
-       return toDict(expdic)
+       expdic = vars(self)           
+       return _to_dict(expdic)
 
 #%% Classe do dicionário de dados medidos
         
@@ -250,54 +209,12 @@ class Data(object):
 #                statusStr = statusStr+'\n'
 #            statusStr = statusStr+'______________________________\n'
                 
-#        return print(statusStr)
-        return statusStr
+        return print(statusStr)
+#        return statusStr
     
     def exportDict(self):
-       expdic = vars(self)
-       
-       def toDict(thing):
-           if isinstance(thing,pytta.classes.SignalObj):
-               mySigObj = vars(thing)
-               for key, value in mySigObj.items():
-                   if value is None:
-                       mySigObj[key] = 0
-                   if isinstance(mySigObj[key],dict) and len(value) == 0:
-                       mySigObj[key] = 0
-               mySigObjno_ = {}
-               for key, value in mySigObj.items():
-                   if key.find('_') >= 0:
-                       key = key.replace('_','')
-                   mySigObjno_[key] = value
-                   
-               return mySigObjno_
-           
-           elif isinstance(thing,dict):
-               dictime = {}
-               for key, value in thing.items():
-                   if key.find(' ') >= 0:
-                       key = key.replace(' ','')
-                   dictime[key] = toDict(value)
-               return dictime
-           
-           elif isinstance(thing,list):
-               dictime = {}
-               j = 0
-               for item in thing:
-                   dictime['T'+str(j)] = toDict(item)
-                   j=j+1
-               return dictime
-           
-           elif thing is None:
-               return 0
-           
-           elif isinstance(thing,newMeasurement):
-               return 0
-           
-           else:
-               return thing
-           
-       return toDict(expdic)
+       expdic = vars(self)           
+       return _to_dict(expdic)
    
 #%% Classe das tomadas de medição
 class measureTake():
@@ -453,8 +370,9 @@ class measureTake():
                 self.calibAverages.append(pytta.SignalObj(self.measuredTake[i].timeSignal[:,0],
                                       'time',
                                       samplingRate=self.measuredTake[i].samplingRate,
-                                      channelName=self.inChName,
+#                                      channelName=self.inChName,
                                       comment=self.excitation))
+                self.calibAverages[i].channels[0].name = self.MS.inChName[0]
 #                self.calibAverages[i].sourceReceiver = self.sourceReceiver[2]
                 self.calibAverages[i].temp = self.measuredTake[i].temp
                 self.calibAverages[i].RH = self.measuredTake[i].RH
