@@ -373,8 +373,9 @@ class measureTake():
                     self.binaural.append(pytta.SignalObj(self.measuredTake[i].timeSignal[:,chcont:chcont+2],
                                                'time',
                                                samplingRate=self.measuredTake[i].samplingRate,
-                                               channelName=[self.MS.inChName[0],self.MS.inChName[1]],
                                                comment=self.excitation))
+                    self.binaural[-1].channels[0].name = self.MS.inChName[0]
+                    self.binaural[-1].channels[1].name = self.MS.inChName[1]
                     if self.kind == 'noisefloor': 
                         SR = [self.receiver[0],self.receiver[1]] 
                     else: 
@@ -389,8 +390,8 @@ class measureTake():
                     self.hc1.append(pytta.SignalObj(self.measuredTake[i].timeSignal[:,chcont],
                                           'time',
                                           samplingRate=self.measuredTake[i].samplingRate,
-                                          channelName=[self.MS.inChName[2]],
                                           comment=self.excitation))
+                    self.hc1[-1].channels[0].name = self.MS.inChName[2]
                     if self.kind == 'noisefloor': 
                         SR = self.receiver[2]
                     else: 
@@ -405,8 +406,8 @@ class measureTake():
                     self.hc2.append(pytta.SignalObj(self.measuredTake[i].timeSignal[:,chcont],
                                           'time',
                                           samplingRate=self.measuredTake[i].samplingRate,
-                                          channelName=[self.MS.inChName[3]],
                                           comment=self.excitation))
+                    self.hc2[-1].channels[0].name = self.MS.inChName[3]
                     if self.kind == 'noisefloor': 
                         SR = self.receiver[3]
                     else: 
