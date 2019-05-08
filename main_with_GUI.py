@@ -329,7 +329,7 @@ class takeWindow(tk.Tk):
                                     source = self.GetSource(), # código de fonte a ser utilizado. Para fins de seleção dos canais de saída
                                     excitation = self.GetExcitation(), # escolhe sinal de excitacão  disponível no Setup de Medição
                                     tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050       
-        elif self.Getkind() == 'noisefloor':
+        elif self.GetKind() == 'noisefloor':
             measureTake = m.measureTake(SM,
                                         kind = 'noisefloor',
                                         # Status do canal: True para Ativado e False para Desativado
