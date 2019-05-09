@@ -109,7 +109,7 @@ class takeWindow(tk.Tk):
         self.medLoad   = tk.Button(self.menuF, text="    Med Load  ", font=('arial', 20, 'bold'), bg='red',command=self.medLoadBA).place(x=1000, y=310)
         # ================   Checagem de níveis de entradas e saídas   ================        
         # Canais de entrada
-        tk.Label(self.menuF, font=('arial', 17, 'bold'), text="Input Channels [dBF]").place(x=3,y=30)
+        tk.Label(self.menuF, font=('arial', 17, 'bold'), text="Input Channels [dBFs]").place(x=3,y=30)
         tk.Label(self.menuF, font=('arial', 14, 'bold'), text="Tack").place(x=0,y=70)
         tk.Label(self.menuF, font=('arial', 14, 'italic'), text="1").place(x=75,y=70)
         tk.Label(self.menuF, font=('arial', 14, 'italic'), text="2").place(x=155,y=70)
@@ -145,7 +145,7 @@ class takeWindow(tk.Tk):
         self.max32 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_3[2]).place(x=210,y=230)
 
         #Canais de saída
-        tk.Label(self.menuF, font=('arial', 17, 'bold'), text="Output Channels [dBF]").place(x=290,y=30)
+        tk.Label(self.menuF, font=('arial', 17, 'bold'), text="Output Channels [dBFs]").place(x=310,y=30)
         tk.Label(self.menuF, font=('arial', 14, 'italic'), text="1").place(x=360,y=70)
         tk.Label(self.menuF, font=('arial', 14, 'italic'), text="2").place(x=440,y=70)
         tk.Label(self.menuF, font=('arial', 14, 'italic'), text="3").place(x=515,y=70)
@@ -160,6 +160,11 @@ class takeWindow(tk.Tk):
         #Botão de Limpar as variáveis de níveis
         self.clear =     tk.Button(self.menuF, text="     Clear     ", font=('arial', 17, 'bold'), bg='white', command=self.clearvars).place(x=175, y=300)
         
+        #String de checagens de ações dos botões
+        self.buttonCheck = tk.StringVar(); self.buttonCheck.set(" ")
+        tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=30, textvariable = self.buttonCheck).place(x=550,y=300)
+#        tk.Label(self.tempF, font=('arial', 15, 'italic'), bg='red', fg='white', text="", bd = 4, width=23).place(x=550,y=300)
+
 
     #========= Função que limpa as variáveis de níveis de entrada e saída =======
     def clearvars(self):
@@ -168,6 +173,7 @@ class takeWindow(tk.Tk):
         self.varInMax_2[0].set("0"); self.varInMax_2[1].set("0"); self.varInMax_2[2].set("0")
         self.varInMax_3[0].set("0"); self.varInMax_3[1].set("0"); self.varInMax_3[2].set("0")
         self.varOutMax[0].set("0"); self.varOutMax[1].set("0"); self.varOutMax[2].set("0")
+        self.buttonCheck.set(" ")
     
     #=================== Condicionando sinais de entrada ========================
     def GetChannelStatus(self):
@@ -318,6 +324,7 @@ class takeWindow(tk.Tk):
 
 
     def takeRunBA(self):
+        self.buttonCheck.set("Finished recording")
         global measureTake
         if self.GetKind() == 'newpoint':
             measureTake = m.measureTake(SM,
@@ -349,35 +356,35 @@ class takeWindow(tk.Tk):
                                         tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
         measureTake.run()
         
-        # Níveis dos canais de entrada
+        
         for i in range(0,3):
+            # Níveis dos canais de entrada
             if self.var1.get():
                 self.varInMax_0[i].set(str(measureTake.measuredTake[i].max_level()[0]))
             if self.var2.get():
                 self.varInMax_1[i].set(str(measureTake.measuredTake[i].max_level()[1]))
             if self.var3.get():
-                self.varInMax_2[i].set(str(measureTake.measuredTake[i].max_level()))
+                self.varInMax_2[i].set(str(measureTake.measuredTake[i].max_level()[0]))
             if self.var4.get():
-                self.varInMax_3[i].set(str(measureTake.measuredTake[i].max_level()))
-                
-        # Níveis dos sinais de saída
-        for i in range(0,3):
+                self.varInMax_3[i].set(str(measureTake.measuredTake[i].max_level()[0]))
+            # Níveis dos sinais de saída
             if self.var8.get():
-                self.varOutMax[i].set(str(excitationSignals['varredura'].max_level()))
+                self.varOutMax[i].set(str(excitationSignals['varredura'].max_level()[0]))
             if self.var9.get():
-                self.varOutMax[i].set(str(excitationSignals['fala'].max_level()))
+                self.varOutMax[i].set(str(excitationSignals['fala'].max_level()[0]))
             if self.var10.get():
-                self.varOutMax[i].set(str(excitationSignals['musica'].max_level()))
+                self.varOutMax[i].set(str(excitationSignals['musica'].max_level()[0]))            
         
         
     def takeCheckBA(self):
         a=1
+        self.buttonCheck.set("Checking results")
         return a
         
     def takeSaveBA(self):
         measureTake.save(D)
+        self.buttonCheck.set("Tack Saved")
         
-                
 #    def medStatusBA(self):
 #        windowStatus = tk.Tk()
 #        scrollbar = tk.Scrollbar(windowStatus)
@@ -395,16 +402,37 @@ class takeWindow(tk.Tk):
 #        windowStatus.mainloop()
         
     def medStatusBA(self):
+        self.buttonCheck.set("Shown on console")
         print(D.getStatus())
         
         
     def medSaveBA(self):
         m.save(SM,D,SM.name)
+        self.buttonCheck.set("All data saved")
         
     def medLoadBA(self):
-        global SM, D
-        SM, D = m.load(input('Digite o nome da medição a ser carregada: '))
+        self.loadWindow = tk.Tk()
+        tk.Label(self.loadWindow, font=('arial', 15, 'italic'), bg='black', fg='DarkSeaGreen3',
+                 width= 32, text="Load measurement data").place(x=5, y=5)
+        tk.Label(self.loadWindow, font=('arial', 15, 'bold'), bg= 'DarkSeaGreen3', fg='black',
+                 text="File name:").place(x=5, y=70)
+        self.fileName = tk.StringVar(); self.fileName.set("")
+        tk.Entry(self.loadWindow, font=('arial', 13), width=30, textvariable=self.fileName).place(x= 110, y= 73)
+        tk.Button(self.loadWindow, text="Load", font=('arial', 15, 'bold'), command = self.LoadData).place(x=110, y=130)
+        tk.Button(self.loadWindow, text="Close", font=('arial', 15, 'bold'), command=self.Close).place(x=240, y=130)
+        self.loadWindow.geometry("400x200+600+360")
+        self.loadWindow.title("Load data")
+        self.loadWindow.configure(background = 'DarkSeaGreen3')
         
+#        global SM, D
+#        SM, D = m.load(input('Digite o nome da medição a ser carregada: '))
+
+    def Close(self):
+        self.loadWindow.destroy()
+        
+    def LoadData(self):
+        global SM, D
+        SM, D = m.load(self.fileName.get())        
         
     def chLevels(self):
         print(pytta.SignalObj.max_level())
@@ -464,5 +492,3 @@ root.configure(background = 'black')
 takeWindow(root)
 #%% Abrindo janela
 root.mainloop()
-
-#pytta.classes.SignalObj.max_level
