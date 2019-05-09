@@ -109,48 +109,53 @@ class takeWindow(tk.Tk):
         self.medLoad   = tk.Button(self.menuF, text="    Med Load  ", font=('arial', 20, 'bold'), bg='red',command=self.medLoadBA).place(x=1000, y=310)
         # ================   Checagem de níveis de entradas e saídas   ================        
         # Canais de entrada
-        self.lblInCh = tk.Label(self.menuF, font=('arial', 17, 'bold'), text="Input Channels").place(x=55,y=30)
-        self.lblInCh_min = tk.Label(self.menuF, font=('arial', 14, 'italic'), text="Min. (dB)").place(x=45,y=70)
-        self.lblInCh_max = tk.Label(self.menuF, font=('arial', 14, 'italic'), text="Max. (dB)").place(x=145,y=70)
+        tk.Label(self.menuF, font=('arial', 17, 'bold'), text="Input Channels [dBF]").place(x=3,y=30)
+        tk.Label(self.menuF, font=('arial', 14, 'bold'), text="Tack").place(x=0,y=70)
+        tk.Label(self.menuF, font=('arial', 14, 'italic'), text="1").place(x=75,y=70)
+        tk.Label(self.menuF, font=('arial', 14, 'italic'), text="2").place(x=155,y=70)
+        tk.Label(self.menuF, font=('arial', 14, 'italic'), text="3").place(x=240,y=70)
         self.lblInCh_1 = tk.Label(self.menuF, font=('arial', 17, 'bold'), text="1").place(x=10,y=110)
         self.lblInCh_2 = tk.Label(self.menuF, font=('arial', 17, 'bold'), text="2").place(x=10,y=150)
         self.lblInCh_3 = tk.Label(self.menuF, font=('arial', 17, 'bold'), text="3").place(x=10,y=190)
         self.lblInCh_4 = tk.Label(self.menuF, font=('arial', 17, 'bold'), text="4").place(x=10,y=230)
-        self.varInMin_1 = tk.IntVar()
-        self.varInMin_1.set(0)
-        self.InMin_1 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMin_1).place(x=50,y=110)
-        self.varInMax_1 = tk.IntVar()
-        self.varInMax_1.set(0)
-        self.InMax_1 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_1).place(x=150,y=110)
-        self.varInMin_2 = tk.IntVar()
-        self.varInMin_2.set(0)
-        self.InMin_2 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMin_2).place(x=50,y=150)
-        self.varInMax_2 = tk.IntVar()
-        self.varInMax_2.set(0)
-        self.InMax_2 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_2).place(x=150,y=150)
-        self.varInMin_3 = tk.IntVar()
-        self.varInMin_3.set(0)
-        self.InMin_3 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMin_3).place(x=50,y=190)
-        self.varInMax_3 = tk.IntVar()
-        self.varInMax_3.set(0)
-        self.InMax_3 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_3).place(x=150,y=190)
-        self.varInMin_4 = tk.IntVar()
-        self.varInMin_4.set(0)
-        self.InMin_4 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMin_4).place(x=50,y=230)
-        self.varInMax_4 = tk.IntVar()
-        self.varInMax_4.set(0)
-        self.InMax_4 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_4).place(x=150,y=230)
-        
+        # Declarando e setando as variáveis de níveis        
+        self.varInMax_0 = [tk.StringVar(), tk.StringVar(), tk.StringVar()]
+        self.varInMax_0[0].set("0"); self.varInMax_0[1].set("0"); self.varInMax_0[2].set("0");
+        self.varInMax_1 = [tk.StringVar(), tk.StringVar(), tk.StringVar()]
+        self.varInMax_1[0].set("0"); self.varInMax_1[1].set("0"); self.varInMax_1[2].set("0");
+        self.varInMax_2 = [tk.StringVar(), tk.StringVar(), tk.StringVar()]
+        self.varInMax_2[0].set("0"); self.varInMax_2[1].set("0"); self.varInMax_2[2].set("0");
+        self.varInMax_3 = [tk.StringVar(), tk.StringVar(), tk.StringVar()]
+        self.varInMax_3[0].set("0"); self.varInMax_3[1].set("0"); self.varInMax_3[2].set("0");
+        # Níveis da entrada 1
+        self.max00 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_0[0]).place(x=50,y=110)
+        self.max01 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_0[1]).place(x=130,y=110)
+        self.max02 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_0[2]).place(x=210,y=110)
+        # Níveis da entrada 2
+        self.max10 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_1[0]).place(x=50,y=150)
+        self.max11 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_1[1]).place(x=130,y=150)
+        self.max12 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_1[2]).place(x=210,y=150)
+        # Níveis da entrada 3
+        self.max20 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_2[0]).place(x=50,y=190)
+        self.max21 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_2[1]).place(x=130,y=190)
+        self.max22 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_2[2]).place(x=210,y=190)
+        # Níveis da entrada 4
+        self.max30 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_3[0]).place(x=50,y=230)
+        self.max31 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_3[1]).place(x=130,y=230)
+        self.max32 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varInMax_3[2]).place(x=210,y=230)
+
         #Canais de saída
-        self.lblOutCh= tk.Label(self.menuF, font=('arial', 17, 'bold'), text="Output Channels").place(x=290,y=30)
-        self.lblOutCh_min = tk.Label(self.menuF, font=('arial', 14, 'italic'), text="Min. (dB)").place(x=295,y=70)
-        self.lblOutCh_max = tk.Label(self.menuF, font=('arial', 14, 'italic'), text="Max. (dB)").place(x=395,y=70)
-        self.varOutMin = tk.IntVar()
-        self.OutMin_1 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varOutMin).place(x=300,y=110)
-        self.varOutMin.set(0)
-        self.varOutMax = tk.IntVar()
-        self.varOutMax.set(0)
-        self.OutMax_1 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varOutMin).place(x=400,y=110)
+        tk.Label(self.menuF, font=('arial', 17, 'bold'), text="Output Channels [dBF]").place(x=290,y=30)
+        tk.Label(self.menuF, font=('arial', 14, 'italic'), text="1").place(x=360,y=70)
+        tk.Label(self.menuF, font=('arial', 14, 'italic'), text="2").place(x=440,y=70)
+        tk.Label(self.menuF, font=('arial', 14, 'italic'), text="3").place(x=515,y=70)
+        # Declarando variáveis e setando
+        self.varOutMax = [tk.StringVar(), tk.StringVar(), tk.StringVar()]
+        self.varOutMax[0].set('0'); self.varOutMax[1].set('0'); self.varOutMax[2].set('0');
+        # Níveis de sáida
+        self.OutMax0 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varOutMax[0]).place(x=330,y=110)
+        self.OutMax1 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varOutMax[1]).place(x=410,y=110)
+        self.OutMax2 = tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=5, textvariable=self.varOutMax[2]).place(x=490,y=110)
         
         #Botão de Limpar as variáveis de níveis
         self.clear =     tk.Button(self.menuF, text="     Clear     ", font=('arial', 17, 'bold'), bg='white', command=self.clearvars).place(x=175, y=300)
@@ -158,16 +163,11 @@ class takeWindow(tk.Tk):
 
     #========= Função que limpa as variáveis de níveis de entrada e saída =======
     def clearvars(self):
-        self.varInMin_1.set(0)
-        self.varInMax_1.set(0)
-        self.varInMin_2.set(0)
-        self.varInMax_2.set(0)
-        self.varInMin_3.set(0)
-        self.varInMax_3.set(0)
-        self.varInMin_4.set(0)
-        self.varInMax_4.set(0)
-        self.varOutMin.set(0)
-        self.varOutMax.set(0)
+        self.varInMax_0[0].set("0"); self.varInMax_0[1].set("0"); self.varInMax_0[2].set("0")
+        self.varInMax_1[0].set("0"); self.varInMax_1[1].set("0"); self.varInMax_1[2].set("0")
+        self.varInMax_2[0].set("0"); self.varInMax_2[1].set("0"); self.varInMax_2[2].set("0")
+        self.varInMax_3[0].set("0"); self.varInMax_3[1].set("0"); self.varInMax_3[2].set("0")
+        self.varOutMax[0].set("0"); self.varOutMax[1].set("0"); self.varOutMax[2].set("0")
     
     #=================== Condicionando sinais de entrada ========================
     def GetChannelStatus(self):
@@ -316,6 +316,7 @@ class takeWindow(tk.Tk):
         
 #%% Funções dos botões - Button Action
 
+
     def takeRunBA(self):
         global measureTake
         if self.GetKind() == 'newpoint':
@@ -348,19 +349,26 @@ class takeWindow(tk.Tk):
                                         tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
         measureTake.run()
         
-#        # Níveis dos canais de entrada
-#        # pytta.SignalObj.min_level(self)[0] ou pytta.SignalObj.max_level(self)[0]
-#        self.varInMin_1.set(AlgumaCoisa.min_level(self)[0])
-#        self.varInMax_1.set(AlgumaCoisa.max_level(self)[0])
-#        self.varInMin_2.set(AlgumaCoisa.min_level(self)[1])
-#        self.varInMax_2.set(AlgumaCoisa.max_level(self)[1])
-#        self.varInMin_3.set(AlgumaCoisa.min_level(self)[2])
-#        self.varInMax_3.set(AlgumaCoisa.max_level(self)[2])
-#        self.varInMin_4.set(AlgumaCoisa.min_level(self)[3])
-#        self.varInMax_4.set(AlgumaCoisa.max_level(self)[3])
-#        # Níevis dos canais de saída
-#        self.varOutMin.set(0)
-#        self.varOutMax.set(0)
+        # Níveis dos canais de entrada
+        for i in range(0,3):
+            if self.var1.get():
+                self.varInMax_0[i].set(str(measureTake.measuredTake[i].max_level()[0]))
+            if self.var2.get():
+                self.varInMax_1[i].set(str(measureTake.measuredTake[i].max_level()[1]))
+            if self.var3.get():
+                self.varInMax_2[i].set(str(measureTake.measuredTake[i].max_level()))
+            if self.var4.get():
+                self.varInMax_3[i].set(str(measureTake.measuredTake[i].max_level()))
+                
+        # Níveis dos sinais de saída
+        for i in range(0,3):
+            if self.var8.get():
+                self.varOutMax[i].set(str(excitationSignals['varredura'].max_level()))
+            if self.var9.get():
+                self.varOutMax[i].set(str(excitationSignals['fala'].max_level()))
+            if self.var10.get():
+                self.varOutMax[i].set(str(excitationSignals['musica'].max_level()))
+        
         
     def takeCheckBA(self):
         a=1
@@ -457,4 +465,4 @@ takeWindow(root)
 #%% Abrindo janela
 root.mainloop()
 
-
+#pytta.classes.SignalObj.max_level
