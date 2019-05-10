@@ -421,7 +421,7 @@ excitationSignals = {}
 excitationSignals['varredura'] = pytta.generate.sweep(freqMin=20, # Geração do sweep (também pode ser carregado projeto prévio)
                             freqMax=20000,
                             fftDegree=17,
-                            startMargin=1,
+                            startMargin=0.75,
                             stopMargin=1.5,
                             method='logarithmic',
                             windowing='hann')
@@ -429,7 +429,7 @@ excitationSignals['musica'] = pytta.read_wav('Piano Over the rainbow Mic2 SHORT_
 excitationSignals['fala'] = pytta.read_wav('Voice Sabine Short_edited.WAV') # Carregando sinal de fala
 
 #%% Cria novo Setup de Medição
-SM = m.newMeasurement(name = 'med-pytta03', # Nome da medição
+SM = m.newMeasurement(name = 'med-pytta03_1', # Nome da medição
 #                      Sintaxe : device = [<entrada>,<saida>] ou <entrada/saida>
 #                      Utilize pytta.list_devices() para listar os dispositivos do seu computador. 
 #                     device = [0,1], # PC laza Seleciona dispositivo listado em pytta.list_devices()
