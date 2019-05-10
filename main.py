@@ -117,4 +117,4 @@ measureTake.save(D)
 m.save(SM,D,SM.name)
 
 #%% Carrega dados medidos e setup de medição do arquivo
-SM, D = m.load('med-pytta03')
+SM, D = m.load('med-pytta03_2')

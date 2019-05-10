@@ -6,7 +6,7 @@ Created on Wed Apr 16 21:48:23 2019
 @author: mtslazarin
 """
 
-#%% Importando bibliotecas
+##%% Importando bibliotecas
 
 import pytta
 from pytta.classes import _to_dict
@@ -15,7 +15,7 @@ import copy as cp
 import time
 import pickle
 
-#%% Classe da medição
+##%% Classe da medição
 
 class newMeasurement():
     
@@ -97,27 +97,12 @@ class newMeasurement():
                                                          device=self.device,
                                                          inChannel=self.inChannel,
                                                          comment='calibration')}
-
-#    def exportDict(self):
-#       expdic = vars(self)
-#       for key, value in expdic.items():
-#           if isinstance(value,pytta.classes.SignalObj):
-#               expdic[key] = vars(value)
-#           elif isinstance(value,dict):
-#               newdict = {}
-#               for key2, value2 in value.items():
-#                   if isinstance(value2,pytta.classes.SignalObj):
-#                       newdict[key2] = vars(value2)
-#                   else:
-#                       newdict[key2] = value2
-#               expdic[key] = newdict
-#       return expdic
                    
     def exportDict(self):
        expdic = vars(self)           
        return _to_dict(expdic)
 
-#%% Classe do dicionário de dados medidos
+##%% Classe do dicionário de dados medidos
         
 class Data(object):
     
@@ -144,21 +129,30 @@ class Data(object):
     def dummyFill(self):
         # Preenche o dicionário de dados medidos com sinais nulos.
         dummyFill = cp.deepcopy(self.MS.excitationSignals)
-        for key in dummyFill:
-            dummyFill[key].timeSignal = dummyFill[key].timeSignal*0
-        dummyFill['noisefloor'] = pytta.SignalObj(np.zeros(self.MS.noiseFloorTp*self.MS.samplingRate),domain='time',samplingRate=self.MS.samplingRate)
-        dummyFill['calibration'] = pytta.SignalObj(np.zeros(self.MS.calibrationTp*self.MS.samplingRate),domain='time',samplingRate=self.MS.samplingRate) 
+#        for key in dummyFill:
         for sourceCode in self.MS.outChannel:
             for rN in range(1,self.MS.receiversNumber+1):
-#                self.measuredData[sourceCode+'R'+str(rN)] = {} # Insere as chaves referente as configurações fonte receptor
+                self.measuredData[sourceCode+'R'+str(rN)] = {} # Insere as chaves referente as configurações fonte receptor
                 for key in self.MS.excitationSignals:
-                    self.measuredData[sourceCode+'R'+str(rN)][key] = {'binaural':cp.deepcopy([dummyFill[key],dummyFill[key],dummyFill[key]]),'hc':cp.deepcopy([dummyFill[key],dummyFill[key],dummyFill[key]])} # Insere as chaves referentes ao sinal de excitação e tipo de gravação
+                    self.measuredData[sourceCode+'R'+str(rN)][key] = {\
+                                      'binaural':\
+                                      [pytta.SignalObj(np.random.rand(len(dummyFill[key].timeSignal),2),domain='time',samplingRate=self.MS.samplingRate),
+                                      pytta.SignalObj(np.random.rand(len(dummyFill[key].timeSignal),2),domain='time',samplingRate=self.MS.samplingRate),
+                                      pytta.SignalObj(np.random.rand(len(dummyFill[key].timeSignal),2),domain='time',samplingRate=self.MS.samplingRate)],
+                                       'hc':
+                                      [pytta.SignalObj(np.random.rand(len(dummyFill[key].timeSignal),1),domain='time',samplingRate=self.MS.samplingRate),
+                                      pytta.SignalObj(np.random.rand(len(dummyFill[key].timeSignal),1),domain='time',samplingRate=self.MS.samplingRate),
+                                      pytta.SignalObj(np.random.rand(len(dummyFill[key].timeSignal),1),domain='time',samplingRate=self.MS.samplingRate)]} # Insere as chaves referentes ao sinal de excitação e tipo de gravação
                     self.status[sourceCode+'R'+str(rN)][key] = {'binaural':True,'hc':True} # Insere as chaves referentes ao sinal de excitação e tipo de gravação
-        self.measuredData['noisefloor'] = cp.deepcopy([[dummyFill['noisefloor'],dummyFill['noisefloor'],dummyFill['noisefloor']],[dummyFill['noisefloor'],dummyFill['noisefloor'],dummyFill['noisefloor']]]) # Cria lista de medições de ruído de fundo
+        noisefloorstr = 'pytta.SignalObj(np.random.rand(self.MS.noiseFloorTp*self.MS.samplingRate,1),domain="time",samplingRate=self.MS.samplingRate)'
+        self.measuredData['noisefloor'] = [[eval(noisefloorstr),eval(noisefloorstr),eval(noisefloorstr)],
+                         [eval(noisefloorstr),eval(noisefloorstr),eval(noisefloorstr)]] # Cria lista de medições de ruído de fundo
         self.status['noisefloor'] = True # Cria lista de medições de ruído de fundo
         self.measuredData['calibration'] = {} # Cria dicionário com os canais de entrada da medição
+        calibrationstr = 'pytta.SignalObj(np.random.rand(self.MS.calibrationTp*self.MS.samplingRate,1),domain="time",samplingRate=self.MS.samplingRate)'
         for chN in self.MS.inChName:
-            self.measuredData['calibration'][chN] = cp.deepcopy([[dummyFill['calibration'],dummyFill['calibration'],dummyFill['calibration']],[dummyFill['calibration'],dummyFill['calibration'],dummyFill['calibration']]]) # Cria uma lista de calibrações para cada canal
+            self.measuredData['calibration'][chN] = [[eval(calibrationstr),eval(calibrationstr),eval(calibrationstr)],
+            [eval(calibrationstr),eval(calibrationstr),eval(calibrationstr)]]# Cria uma lista de calibrações para cada canal
             self.status['calibration'][chN] = True
             
     def getStatus(self):
@@ -216,7 +210,7 @@ class Data(object):
        expdic = vars(self)           
        return _to_dict(expdic)
    
-#%% Classe das tomadas de medição
+##%% Classe das tomadas de medição
 class measureTake():
     
     def __init__(self,
