@@ -74,11 +74,11 @@ measureTake = m.measureTake(SM,
                                         'R1', # canal 2 (ATENÇÃO: canal 1 e 2 devem ter a mesma cfg.)
                                         'R2', # canal 3 
                                         'R3'], # canal 4
-                            source = 'S1', # código de fonte a ser utilizado. Para fins de seleção dos canais de saída
-#                            source = 'S2',
+#                            source = 'S1', # código de fonte a ser utilizado. Para fins de seleção dos canais de saída
+                            source = 'S2',
 #                            source = 'S3',
-                            excitation = 'varredura', # escolhe sinal de excitacão  disponível no Setup de Medição
-#                            excitation = 'fala',
+#                            excitation = 'varredura', # escolhe sinal de excitacão  disponível no Setup de Medição
+                            excitation = 'fala',
 #                            excitation = 'musica',
                             tempHumid = tempHumid) # passa objeto de comunicação com LabJack U3 + EI1050
 #%% Cria nova tomada de medição do ruído de fundo
@@ -110,11 +110,8 @@ measureTake = m.measureTake(SM,
 #%% Nova tomada de medição
 measureTake.run()
 
-#%% Salva tomada de medição no objeto de dados D
+#%% Salva tomada de medição no objeto de dados D e no disco
 measureTake.save(D)
-
-#%% Salva dados medidos e setup de medição para um arquivo pickle
-m.save(SM,D,SM.name)
 
 #%% Carrega dados medidos e setup de medição do arquivo
 SM, D = m.load('med-teste')

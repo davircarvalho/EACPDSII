@@ -14,6 +14,8 @@ import numpy as np
 import copy as cp
 import time
 import pickle
+from os import getcwd, listdir, mkdir
+from os.path import isfile, join, exists
 
 ##%% Classe da medição
 
@@ -329,17 +331,24 @@ class measureTake():
                     self.hc2[i].timeStamp = self.measuredTake[i].timeStamp        
 
         # Salva dados no dicionário do objeto de dados dataObj
+        taketopkl = {'measuredData':{},'status':{}}
         if self.kind == 'newpoint':
             # Adiciona cada uma das três posições de receptor da última tomada de medição     
             if self.channelStatus[0] and self.channelStatus[1]:
                 dataObj.measuredData[self.binaural[0].sourceReceiver[0]][self.binaural[0].comment]['binaural'] = self.binaural
+                taketopkl['measuredData'][self.binaural[0].sourceReceiver[0]] = {self.binaural[0].comment:{'binaural':self.binaural}}
                 dataObj.status[self.binaural[0].sourceReceiver[0]][self.binaural[0].comment]['binaural'] = True
+                taketopkl['status'][self.binaural[0].sourceReceiver[0]] = {self.binaural[0].comment:{'binaural': True}}
             if self.channelStatus[2]:
                 dataObj.measuredData[self.hc1[0].sourceReceiver][self.hc1[0].comment]['hc'] = self.hc1
+                taketopkl['measuredData'][self.hc1[0].sourceReceiver] = {self.hc1[0].comment:{'hc':self.hc1}}
                 dataObj.status[self.hc1[0].sourceReceiver][self.hc1[0].comment]['hc'] = True
+                taketopkl['status'][self.hc1[0].sourceReceiver] = {self.hc1[0].comment:{'hc':True}}
             if self.channelStatus[3]:
                 dataObj.measuredData[self.hc2[0].sourceReceiver][self.hc2[0].comment]['hc'] = self.hc2
+                taketopkl['measuredData'][self.hc2[0].sourceReceiver] = {self.hc2[0].comment:{'hc':self.hc2}}
                 dataObj.status[self.hc2[0].sourceReceiver][self.hc2[0].comment]['hc'] = True
+                taketopkl['status'][self.hc2[0].sourceReceiver] = {self.hc2[0].comment:{'hc':True}}
                 
         if self.kind == 'noisefloor':
             newNF = {}
@@ -350,7 +359,9 @@ class measureTake():
             if self.channelStatus[3]:
                 newNF[self.hc2[0].sourceReceiver] = self.hc2
             dataObj.measuredData['noisefloor'].append(newNF)
+            taketopkl['measuredData']['noisefloor'] = newNF
             dataObj.status['noisefloor'] = True
+            taketopkl['status']['noisefloor'] = True
             
         if self.kind == 'calibration':
             self.calibAverages = []
@@ -372,82 +383,103 @@ class measureTake():
                 self.calibAverages[i].RH = self.measuredTake[i].RH
                 self.calibAverages[i].timeStamp = self.measuredTake[i].timeStamp
             dataObj.measuredData['calibration'][self.inChName[0]].append(self.calibAverages)
+            taketopkl['measuredData']['calibration'] = {self.inChName[0]:self.calibAverages}
             dataObj.status['calibration'][self.inChName[0]] = True
+            taketopkl['status']['calibration'] = {self.inChName[0]:True}
         if self.tempHumid != None:
             self.tempHumid.stop()
+
+        # Save last take to file
+        mypath = getcwd()+'/'+self.MS.name+'/'
+        mytakefilesprefix = self.MS.name+'_D_take-'
+        myMSfile = self.MS.name+'_MS'
+        if not exists(mypath):
+            mkdir(mypath)
+        myfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+        lasttake = 0
+        saveMS = True
+        for file in myfiles:
+            if mytakefilesprefix in file:
+                newlasttake = file.replace(mytakefilesprefix,'')
+                newlasttake = int(newlasttake.replace('.pkl',''))
+                if newlasttake > lasttake:
+                    lasttake = newlasttake
+            if myMSfile in file:
+                saveMS = False
+        if saveMS:
+            msD = {'averages':self.MS.averages,
+                   'calibrationTp':self.MS.calibrationTp,
+                   'device':self.MS.device,
+                   'excitationSignals':self.MS.excitationSignals,
+                   'freqMax':self.MS.freqMax,
+                   'freqMin':self.MS.freqMin,
+                   'inChName':self.MS.inChName,
+                   'inChannel':self.MS.inChannel,
+                   'measurementObjects':self.MS.measurementObjects,
+                   'name':self.MS.name,
+                   'noiseFloorTp':self.MS.noiseFloorTp,
+                   'outChannel':self.MS.outChannel,
+                   'receiversNumber':self.MS.receiversNumber,
+                   'samplingRate':self.MS.samplingRate,
+                   'sourcesNumber':self.MS.sourcesNumber}
+            output = open(mypath+myMSfile+'.pkl', 'wb')
+            pickle.dump(msD,output)
+            output.close()
+        output = open(mypath+mytakefilesprefix+str(lasttake+1)+'.pkl', 'wb')
+        pickle.dump(taketopkl,output)
+        output.close()        
     
-def save(MS,D,filename):
-    timeStamp = time.ctime(time.time())
-    msD = {'averages':MS.averages,
-           'calibrationTp':MS.calibrationTp,
-           'device':MS.device,
-           'excitationSignals':MS.excitationSignals,
-           'freqMax':MS.freqMax,
-           'freqMin':MS.freqMin,
-           'inChName':MS.inChName,
-           'inChannel':MS.inChannel,
-           'measurementObjects':MS.measurementObjects,
-           'name':MS.name,
-           'noiseFloorTp':MS.noiseFloorTp,
-           'outChannel':MS.outChannel,
-           'receiversNumber':MS.receiversNumber,
-           'samplingRate':MS.samplingRate,
-           'sourcesNumber':MS.sourcesNumber}
-    dD = {'measuredData':D.measuredData,
-          'status':D.status}
-    saveDict = {'MS':msD,'Data':dD,'Timestamp':timeStamp}
-    # write python dict to a file
-    output = open(filename+'.pkl', 'wb')
-    pickle.dump(saveDict,output)
-    output.close()
-    
-    #    dtpk_D_md = {} # Dict to pkl measuredData
-#    dtpk_D_st = {} # Dict to pkl status
-#    items = 0
-#    savecount = 0
-#    for key, value in D.measuredData.items():
-#        if items<=4:
-#            dtpk_D_md[key] = value
-#            dtpk_D_st[key] = D.status[key]
-#            if items==4:
-#                saveDict = {}
-#                saveDict['Data']={'measuredData':dtpk_D_md,'status':dtpk_D_st}
-#                if savecount == 0:
-#                    saveDict['MS'] = dtpk_MS
-#                    saveDict['Timestamp'] = timeStamp
-#                print(saveDict)
-#                dfilename = filename+'_part_'+str(savecount)
-#                output = open(dfilename+'.pkl','wb')
-#                pickle.dump(saveDict,output)
-#                output.close()
-#                dtpk_D_md = {}
-#                dtpk_D_st = {}
-#                savecount += 1
-#                items = 0
-#            items += 1
-        
-    
-def load(filename):
-    #%% read python dict back from the file
-    pkl_file = open(filename+'.pkl', 'rb')
+def load(medname):
+    mypath = getcwd()+'/'+medname+'/'
+    mytakefilesprefix = medname+'_D_take-'
+    myMSfile = medname+'_MS'
+    if not exists(mypath):
+        raise NameError(medname+' not find in the current working directory')
+    myfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+    #Load MS
+    pkl_file = open(mypath+myMSfile+'.pkl', 'rb')
     loadDict = pickle.load(pkl_file)
-    pkl_file.close()            
-    MS = newMeasurement(averages = loadDict['MS']['averages'],
-                        calibrationTp = loadDict['MS']['calibrationTp'],
-                        device = loadDict['MS']['device'],
-                        excitationSignals = loadDict['MS']['excitationSignals'],
-                        freqMax = loadDict['MS']['freqMax'],
-                        freqMin = loadDict['MS']['freqMin'],
-                        inChName = loadDict['MS']['inChName'],
-                        inChannel = loadDict['MS']['inChannel'],
-                        name = loadDict['MS']['name'],
-                        noiseFloorTp = loadDict['MS']['noiseFloorTp'],
-                        outChannel = loadDict['MS']['outChannel'],
-                        receiversNumber = loadDict['MS']['receiversNumber'],
-                        samplingRate = loadDict['MS']['samplingRate'],
-                        sourcesNumber = loadDict['MS']['sourcesNumber'])    
-    MS.measurementObjects = loadDict['MS']['measurementObjects']
+    pkl_file.close()
+    MS = newMeasurement(averages = loadDict['averages'],
+                        calibrationTp = loadDict['calibrationTp'],
+                        device = loadDict['device'],
+                        excitationSignals = loadDict['excitationSignals'],
+                        freqMax = loadDict['freqMax'],
+                        freqMin = loadDict['freqMin'],
+                        inChName = loadDict['inChName'],
+                        inChannel = loadDict['inChannel'],
+                        name = loadDict['name'],
+                        noiseFloorTp = loadDict['noiseFloorTp'],
+                        outChannel = loadDict['outChannel'],
+                        receiversNumber = loadDict['receiversNumber'],
+                        samplingRate = loadDict['samplingRate'],
+                        sourcesNumber = loadDict['sourcesNumber'])    
+    MS.measurementObjects = loadDict['measurementObjects']
+    # Load data
     D = Data(MS)
-    D.measuredData = loadDict['Data']['measuredData']
-    D.status = loadDict['Data']['status']
+    for file in myfiles:
+        if mytakefilesprefix in file:
+            pkl_file = open(mypath+file, 'rb')
+            loadDict = pickle.load(pkl_file)            
+            for key in loadDict:
+                if key == 'measuredData':
+                    for key, value in loadDict['measuredData'].items():
+                        if key == 'calibration':
+                            for key2, value2 in loadDict['measuredData'][key].items():
+                                D.measuredData[key][key2].append(value2)
+                        elif key == 'noisefloor':
+                                D.measuredData[key].append(value)
+                        else:
+                            for key2, value2 in loadDict['measuredData'][key].items():
+                                D.measuredData[key][key2] = {**D.measuredData[key][key2],**value2}
+                if key == 'status':
+                    for key, value in loadDict['status'].items():
+                        if key == 'calibration':
+                            for key2, value2 in loadDict['status'][key].items():
+                                D.status[key][key2] = value2
+                        elif key == 'noisefloor':
+                                D.status[key] = value
+                        else:
+                            for key2, value2 in loadDict['status'][key].items():
+                                D.status[key][key2] = {**D.status[key][key2],**value2}
     return MS, D

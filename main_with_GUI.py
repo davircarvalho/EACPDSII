@@ -3,7 +3,7 @@
 """
 Created on Thu May  2 14:42:38 2019
 
-@author: mtslazarin
+@author: leona
 """
 
 #%% Importando bibliotecas
