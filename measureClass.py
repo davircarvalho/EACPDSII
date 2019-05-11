@@ -14,6 +14,7 @@ import numpy as np
 import copy as cp
 import time
 import pickle
+import matplotlib.pyplot as plot
 from os import getcwd, listdir, mkdir
 from os.path import isfile, join, exists
 
@@ -427,7 +428,22 @@ class measureTake():
             output.close()
         output = open(mypath+mytakefilesprefix+str(lasttake+1)+'.pkl', 'wb')
         pickle.dump(taketopkl,output)
-        output.close()        
+        output.close()       
+        
+    def take_check(self):
+        if self.measuredTake[0].num_channels() > 1:
+            for chIndex in range(self.measuredTake[0].num_channels()):
+                plot.figure( figsize=(6,5) )
+                label = self.measuredTake[0].channels[chIndex].name+' ['+self.measuredTake[0].channels[chIndex].unit+']'
+                plot.plot( self.measuredTake[0].timeVector,self.measuredTake[0].timeSignal[:,chIndex],label=label)
+                plot.legend(loc='best')
+                plot.grid(color='gray', linestyle='-.', linewidth=0.4)
+                plot.axis( ( self.measuredTake[0].timeVector[0] - 10/self.measuredTake[0].samplingRate, \
+                            self.measuredTake[0].timeVector[-1] + 10/self.measuredTake[0].samplingRate, \
+                            1.05*np.min( self.measuredTake[0].timeSignal ), \
+                           1.05*np.max( self.measuredTake[0].timeSignal ) ) )
+                plot.xlabel(r'$Time$ [s]')
+                plot.ylabel(r'$Amplitude$')
     
 def load(medname):
     mypath = getcwd()+'/'+medname+'/'

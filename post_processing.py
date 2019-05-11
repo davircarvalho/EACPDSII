@@ -13,7 +13,7 @@ import pytta
 import copy as cp
 
 #%%
-medName = 'med-pytta03'
+medName = 'med-teste'
 
 #%%
 SM, D = m.load(medName)
