@@ -401,6 +401,32 @@ def save(MS,D,filename):
     pickle.dump(saveDict,output)
     output.close()
     
+    #    dtpk_D_md = {} # Dict to pkl measuredData
+#    dtpk_D_st = {} # Dict to pkl status
+#    items = 0
+#    savecount = 0
+#    for key, value in D.measuredData.items():
+#        if items<=4:
+#            dtpk_D_md[key] = value
+#            dtpk_D_st[key] = D.status[key]
+#            if items==4:
+#                saveDict = {}
+#                saveDict['Data']={'measuredData':dtpk_D_md,'status':dtpk_D_st}
+#                if savecount == 0:
+#                    saveDict['MS'] = dtpk_MS
+#                    saveDict['Timestamp'] = timeStamp
+#                print(saveDict)
+#                dfilename = filename+'_part_'+str(savecount)
+#                output = open(dfilename+'.pkl','wb')
+#                pickle.dump(saveDict,output)
+#                output.close()
+#                dtpk_D_md = {}
+#                dtpk_D_st = {}
+#                savecount += 1
+#                items = 0
+#            items += 1
+        
+    
 def load(filename):
     #%% read python dict back from the file
     pkl_file = open(filename+'.pkl', 'rb')
