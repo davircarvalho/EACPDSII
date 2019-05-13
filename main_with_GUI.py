@@ -105,8 +105,8 @@ class takeWindow(tk.Tk):
         self.takeCheck = tk.Button(self.menuF, text=" Take Check ", font=('arial', 20, 'bold'), bg='green',command=self.takeCheckBA).place(x=1000, y=70)
         self.takeSave  = tk.Button(self.menuF, text="  Take Save  ", font=('arial', 20, 'bold'), bg='green',command=self.takeSaveBA).place(x=1000, y=130)
         self.medStatus = tk.Button(self.menuF, text="  Med Status  ", font=('arial', 20, 'bold'), bg='red',command=self.medStatusBA).place(x=1000, y=190)
-        self.medSave   = tk.Button(self.menuF, text="   Med Save   ", font=('arial', 20, 'bold'), bg='red',command=self.medSaveBA).place(x=1000, y=250)
-        self.medLoad   = tk.Button(self.menuF, text="    Med Load  ", font=('arial', 20, 'bold'), bg='red',command=self.medLoadBA).place(x=1000, y=310)
+        #self.medSave   = tk.Button(self.menuF, text="   Med Save   ", font=('arial', 20, 'bold'), bg='red',command=self.medSaveBA).place(x=1000, y=310)
+        self.medLoad   = tk.Button(self.menuF, text="    Med Load  ", font=('arial', 20, 'bold'), bg='red',command=self.medLoadBA).place(x=1000, y=250)
         # ================   Checagem de níveis de entradas e saídas   ================        
         # Canais de entrada
         tk.Label(self.menuF, font=('arial', 17, 'bold'), text="Input Channels [dBFs]").place(x=3,y=30)
@@ -377,29 +377,13 @@ class takeWindow(tk.Tk):
         
         
     def takeCheckBA(self):
-        a=1
+        measureTake.take_check()
         self.buttonCheck.set("Checking results")
-        return a
         
     def takeSaveBA(self):
         measureTake.save(D)
         self.buttonCheck.set("Tack Saved")
         
-#    def medStatusBA(self):
-#        windowStatus = tk.Tk()
-#        scrollbar = tk.Scrollbar(windowStatus)
-#        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)        
-#        listbox = tk.Listbox(windowStatus)
-#        listbox.pack(fill=tk.BOTH)        
-#        tk.Label(windowStatus, text=D.getStatus()).pack(fill=tk.X)
-##        for i in range(0, len(D.getStatus())):
-##            if D.getStatus()[i] == '\n':
-##                listbox.insert(tk.END, '\n')
-##            else:
-##        listbox.insert(tk.END, D.getStatus())           
-#        listbox.config(yscrollcommand=scrollbar.set)
-#        scrollbar.config(command=listbox.yview)
-#        windowStatus.mainloop()
         
     def medStatusBA(self):
         self.buttonCheck.set("Shown on console")
@@ -411,18 +395,19 @@ class takeWindow(tk.Tk):
         self.buttonCheck.set("All data saved")
         
     def medLoadBA(self):
-        self.loadWindow = tk.Tk()
+        self.loadWindow = tk.Toplevel()
         tk.Label(self.loadWindow, font=('arial', 15, 'italic'), bg='black', fg='DarkSeaGreen3',
                  width= 32, text="Load measurement data").place(x=5, y=5)
         tk.Label(self.loadWindow, font=('arial', 15, 'bold'), bg= 'DarkSeaGreen3', fg='black',
                  text="File name:").place(x=5, y=70)
-        self.fileName = tk.StringVar(); self.fileName.set("")
+        self.fileName = tk.StringVar()
         tk.Entry(self.loadWindow, font=('arial', 13), width=30, textvariable=self.fileName).place(x= 110, y= 73)
         tk.Button(self.loadWindow, text="Load", font=('arial', 15, 'bold'), command = self.LoadData).place(x=110, y=130)
         tk.Button(self.loadWindow, text="Close", font=('arial', 15, 'bold'), command=self.Close).place(x=240, y=130)
         self.loadWindow.geometry("400x200+600+360")
         self.loadWindow.title("Load data")
         self.loadWindow.configure(background = 'DarkSeaGreen3')
+        self.loadWindow.mainloop()
         
 #        global SM, D
 #        SM, D = m.load(input('Digite o nome da medição a ser carregada: '))
@@ -432,7 +417,8 @@ class takeWindow(tk.Tk):
         
     def LoadData(self):
         global SM, D
-        SM, D = m.load(self.fileName.get())        
+        SM, D = m.load(self.fileName.get())
+        self.buttonCheck.set("File " + "'" + self.fileName.get() + "'" + " uploaded")
         
     def chLevels(self):
         print(pytta.SignalObj.max_level())
