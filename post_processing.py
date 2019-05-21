@@ -15,21 +15,13 @@ import copy as cp
 #%%
 medName = 'med-sala_conselhos'
 
-#%%
+#%% Export all takes to .mat files
 m.med_to_mat(medName)
-#%%
+#%% Load all data to workspace
 SM,D = m.load(medName)
-#%%
+#%% Apply calibration
 calibSig = cp.deepcopy(D.measuredData['calibration']['Orelha E'][0][0])
 calibSig.plot_freq()
-#%%
 calibdSig = cp.deepcopy(calibSig)
 calibdSig.calib_pressure(0,calibSig,1,1000)
 calibdSig.plot_freq()
-
-#%% 
-Ddict = D.exportDict()
-SMdict = SM.exportDict()
-
-#%%
-io.savemat(medName+'.mat',{'MeasurementSetup':SMdict,'Data':Ddict})

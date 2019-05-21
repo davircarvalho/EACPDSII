@@ -516,6 +516,7 @@ def med_to_mat(medname):
     myMSpklfile = open(mypath+myMSfile+'.pkl', 'rb')
     myMSdict = pickle.load(myMSpklfile)
     myMSpklfile.close()
+    myMSdict = _to_dict(myMSdict)
     io.savemat(mymatpath+myMSfile+'.mat',{'MeasurementSetup':myMSdict},format='5')
     for file in myfiles:
         filename = file.replace('.pkl','')
@@ -527,23 +528,3 @@ def med_to_mat(medname):
                     print('Exporting "'+filename+'" to .mat file.\n')
                     matDict = _to_dict(loadDict)
                     io.savemat(mymatpath+filename+'.mat',matDict,format='5')
-#                    for key, value in loadDict['measuredData'].items():
-#                        if key == 'calibration':
-#                            for key2, value2 in loadDict['measuredData'][key].items():
-#                                D.measuredData[key][key2].append(value2)
-#                        elif key == 'noisefloor':
-#                                D.measuredData[key].append(value)
-#                        else:
-#                            for key2, value2 in loadDict['measuredData'][key].items():
-#                                D.measuredData[key][key2] = {**D.measuredData[key][key2],**value2}
-#                if key == 'status':
-#                    for key, value in loadDict['status'].items():
-#                        if key == 'calibration':
-#                            for key2, value2 in loadDict['status'][key].items():
-#                                D.status[key][key2] = value2
-#                        elif key == 'noisefloor':
-#                                D.status[key] = value
-#                        else:
-#                            for key2, value2 in loadDict['status'][key].items():
-#                                D.status[key][key2] = {**D.status[key][key2],**value2}
-#    return MS, D

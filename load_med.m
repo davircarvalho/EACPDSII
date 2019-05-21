@@ -5,8 +5,8 @@ function [Data,MeasurementSetup] = load_med(medName)
     medmatpath = strcat(medName,'_mat/'); % Caminho dos takes em .mat
     
     load(strcat(medmatpath,medName,'_MS.mat')); % Carregando MeasurementSetup
-
-    myfiles = split(ls(strcat(medmatpath,'*take*.mat'))); % Lista com nomes dos arquivos dos takes
+    myfiless = ls(strcat(medmatpath,'*take*.mat'));
+    myfiles = split(myfiless); % Lista com nomes dos arquivos dos takes
     
     for i=1:length(myfiles)-1 % loop para adicionar itens de cada take no struct medStruct
         file = char(myfiles(i)); % nome do arquivo da vez
