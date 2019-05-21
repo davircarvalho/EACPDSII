@@ -13,11 +13,12 @@ import pytta
 import copy as cp
 
 #%%
-medName = 'med-teste'
+medName = 'med-sala_conselhos'
 
 #%%
-SM, D = m.load(medName)
-
+m.med_to_mat(medName)
+#%%
+SM,D = m.load(medName)
 #%%
 calibSig = cp.deepcopy(D.measuredData['calibration']['Orelha E'][0][0])
 calibSig.plot_freq()
@@ -31,4 +32,4 @@ Ddict = D.exportDict()
 SMdict = SM.exportDict()
 
 #%%
-io.savemat(medName+'.mat',{'MeasurementSetup':SMdict,'Data':Ddict},format='5')
+io.savemat(medName+'.mat',{'MeasurementSetup':SMdict,'Data':Ddict})
