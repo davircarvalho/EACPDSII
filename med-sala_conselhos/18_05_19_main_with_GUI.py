@@ -162,7 +162,7 @@ class takeWindow(tk.Tk):
         
         #String de checagens de ações dos botões
         self.buttonCheck = tk.StringVar(); self.buttonCheck.set(" ")
-        tk.Entry(self.menuF, font=('arial', 17, 'bold'), fg='green', bd=1, width=30, textvariable = self.buttonCheck).place(x=550,y=300)
+        tk.Entry(self.menuF, font=('arial', 17, 'bold'), bd=1, width=30, textvariable = self.buttonCheck).place(x=550,y=300)
 #        tk.Label(self.tempF, font=('arial', 15, 'italic'), bg='red', fg='white', text="", bd = 4, width=23).place(x=550,y=300)
 
 
@@ -447,8 +447,8 @@ SM = m.newMeasurement(name = 'med-sala_conselhos', # Nome da medição
 #                      Sintaxe : device = [<entrada>,<saida>] ou <entrada/saida>
 #                      Utilize pytta.list_devices() para listar os dispositivos do seu computador. 
 #                     device = [0,1], # PC laza Seleciona dispositivo listado em pytta.list_devices()
-#                     device = 4, # Saffire Pro 40 laza Seleciona dispositivo listado em pytta.list_devices()
-                     device = [1,3], # PC Leo Seleciona dispositivo listado em pytta.list_devices()
+                     device = 4, # Saffire Pro 40 laza Seleciona dispositivo listado em pytta.list_devices()
+#                     device = [1,3], # PC Leo Seleciona dispositivo listado em pytta.list_devices()
 #                     device = 0, # Firebox laza Seleciona dispositivo listado em pytta.list_devices()
 #                     device = [1,4], # PC laza Seleciona dispositivo listado em pytta.list_devices()
                      excitationSignals=excitationSignals, # Sinais de excitação

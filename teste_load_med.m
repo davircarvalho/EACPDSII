@@ -1,0 +1,1 @@
+[Data, MeasurementSetup] = load_med('med-sala_conselhos');
