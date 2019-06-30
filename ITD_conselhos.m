@@ -31,34 +31,37 @@ azz =  [71, 27, 308, 305, 300, 162, 279, 284, 276, 65];
 ell =  [09, 01, 358, 001, 014, 158, 018, 003, 047, 07];
 % el = [9    1  -2   1   14     2   18   3    47  7
 
+
 % Colocar valores entre -180°:180°
 for i = 1:length(azz)
     if azz(i)> 180
         azz(i) = azz(i) -360;    
     end
-%     if ell(i) > 90
-%        ell(i) = 180 - ell(i);   
-%     end
+    if ell(i) > 90
+       ell(i) = 180 - ell(i);   
+    end
 end
 
 % Organiza por sequência de azimute
-% [td, idx] = sort(td);
+% % [td, idx] = sort(td);
 [azz, idx] = sort(azz);
 % Faz a mesma alteração feita no azimute 
-ell(idx) = ell; 
-ITD(idx) = round(ITD, 1);
+
+
+%    ell = sortrows(ell, idx);
+ell = ell(idx); 
+ITD = round(ITD(idx), 1);
 
 %%
 clc
 itd = eye(10).*ITD;
  k = 1:10;
- l(idx) = k;
-imagesc(l, l, itd);
+imagesc(k, k, itd);
 
 
 
-set(gca,'XTick', linspace(8, 9, 10));
-set(gca,'YTick', linspace(8, 9, 10));
+set(gca,'XTick', linspace(1, 10, 10));
+set(gca,'YTick', linspace(1, 10, 10));
 yticklabels(ell)
 xticklabels(azz)
 
